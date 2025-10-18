@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/views/widget_tree.dart';
 
-class SetUpProfile extends StatefulWidget {
-  const SetUpProfile({super.key});
+class SetUpTraits extends StatefulWidget {
+  const SetUpTraits({super.key});
 
   @override
-  State<SetUpProfile> createState() => _SetUpProfileState();
+  State<SetUpTraits> createState() => _SetUpTraitsState();
 }
 
-class _SetUpProfileState extends State<SetUpProfile> {
+class _SetUpTraitsState extends State<SetUpTraits> {
   final List<String> sports = [
     'Football',
     'Basketball',
@@ -84,18 +84,18 @@ class _SetUpProfileState extends State<SetUpProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Set Up Profile")),
+      appBar: AppBar(title: const Text("")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             const Center(
               child: Text(
-                "Set Up Profile Page",
+                "Pick your poison",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 35),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -108,37 +108,40 @@ class _SetUpProfileState extends State<SetUpProfile> {
                 ),
               ),
             ),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle done action
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const WidgetTree()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(1000, 239, 230, 222),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: ValueListenableBuilder(
-                  valueListenable: isDarkMode,
-                  builder: (context, isDarkMode, _) {
-                    return Text(
-                      "DONE",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: isDarkMode
-                            ? Color.fromARGB(255, 7, 7, 7)
-                            : Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+            Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle done action
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const WidgetTree()),
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(1000, 239, 230, 222),
+                    padding: const EdgeInsets.symmetric(vertical: 14,),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: ValueListenableBuilder(
+                    valueListenable: isDarkMode,
+                    builder: (context, isDarkMode, _) {
+                      return Text(
+                        "DONE",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isDarkMode
+                              ? Color.fromARGB(255, 7, 7, 7)
+                              : Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

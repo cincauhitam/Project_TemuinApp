@@ -213,9 +213,14 @@ class _LoginPageState extends State<LoginPage> {
                           builder: (context) => const RegisterPage()),
                     );
                   },
-                  child: const Text(
-                    'Don\'t have an account? Register',
-                    style: TextStyle(color: Colors.white),
+                  child: ValueListenableBuilder(
+                    valueListenable: isDarkMode,
+                    builder: (context, dark, _) {
+                      return Text(
+                        'Don\'t have an account? Register',
+                        style: TextStyle(color: dark ? Colors.white : Colors.black),
+                      );
+                    }
                   ),
                 ),
               ],
