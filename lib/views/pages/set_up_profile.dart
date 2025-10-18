@@ -33,10 +33,16 @@ class _SetUpProfileState extends State<SetUpProfile> {
             padding: const EdgeInsets.only(bottom: 50),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WidgetTree()));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => WidgetTree()),
+                );
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 100,
+                  vertical: 20,
+                ),
                 textStyle: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
