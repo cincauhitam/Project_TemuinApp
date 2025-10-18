@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
 import 'package:project_flutter/views/pages/set_up_profile.dart';
-
+import 'package:project_flutter/views/pages/set_up_traits.dart';
 void main() {
   runApp(const MyApp());
 }
