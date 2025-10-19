@@ -167,8 +167,29 @@ class _LoginPageState extends State<LoginPage> {
                         height: 48,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: Google login logic
+                          onPressed: () async {
+                            try {
+                              final authService = AuthService();
+                              final result = await authService.signInWithGoogle();
+
+                              if (result.user != null) {
+                                print("User logged in with Google: ${result.user!.email}");
+
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => WidgetTree(),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Google sign-in failed: ${e.toString()}'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: dark
