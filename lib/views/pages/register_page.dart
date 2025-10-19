@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/services/auth_services.dart';
 import 'package:project_flutter/views/pages/set_up_profile.dart';
-import 'package:project_flutter/views/pages/set_up_traits.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
