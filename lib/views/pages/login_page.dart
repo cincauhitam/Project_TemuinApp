@@ -22,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("Login Page")),
         actions: [
           IconButton(
             icon: ValueListenableBuilder<bool>(
@@ -46,10 +45,10 @@ class _LoginPageState extends State<LoginPage> {
                 // Image on top
                 Image.asset(
                   'assets/images/test_icon.png',
-                  height: 200,
+                  height: 250,
                   alignment: Alignment.topCenter,
                 ),
-                const SizedBox(height: 35),
+                const SizedBox(height: 50),
 
                 // Username field
                 TextFormField(
@@ -71,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 30),
 
                 // Password field
                 TextFormField(
@@ -100,17 +99,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 // Privacy policy
-                CheckboxListTile.adaptive(
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: const Text('On some privacy shiiii'),
-                  value: privacyPolicy,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      privacyPolicy = value ?? false;
-                    });
-                  },
-                ),
                 const SizedBox(height: 24),
 
                 // LOGIN button (dark mode adaptive)
@@ -125,22 +113,24 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundColor: dark
                               ? const Color.fromARGB(1000, 239, 230, 222)
                               : const Color.fromARGB(1000, 154, 0, 2),
-                          foregroundColor:
-                              dark ? Colors.black : Colors.white,
+                          foregroundColor: dark ? Colors.black : Colors.white,
                         ),
                         onPressed: () async {
                           final email = usernameController.text;
                           final password = passwordController.text;
 
                           try {
-                            final result =
-                                await AuthService().login(email, password);
+                            final result = await AuthService().login(
+                              email,
+                              password,
+                            );
                             print("User logged in: $result");
 
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WidgetTree()),
+                                builder: (context) => WidgetTree(),
+                              ),
                             );
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -170,10 +160,13 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             try {
                               final authService = AuthService();
-                              final result = await authService.signInWithGoogle();
+                              final result = await authService
+                                  .signInWithGoogle();
 
                               if (result.user != null) {
-                                print("User logged in with Google: ${result.user!.email}");
+                                print(
+                                  "User logged in with Google: ${result.user!.email}",
+                                );
 
                                 Navigator.pushReplacement(
                                   context,
@@ -185,7 +178,9 @@ class _LoginPageState extends State<LoginPage> {
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Google sign-in failed: ${e.toString()}'),
+                                  content: Text(
+                                    'Google sign-in failed: ${e.toString()}',
+                                  ),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -195,8 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                             backgroundColor: dark
                                 ? const Color.fromARGB(1000, 239, 230, 222)
                                 : const Color.fromARGB(1000, 154, 0, 2),
-                            foregroundColor:
-                                dark ? Colors.black : Colors.white,
+                            foregroundColor: dark ? Colors.black : Colors.white,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 35),
@@ -231,7 +225,8 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RegisterPage()),
+                        builder: (context) => const RegisterPage(),
+                      ),
                     );
                   },
                   child: ValueListenableBuilder(
@@ -239,9 +234,11 @@ class _LoginPageState extends State<LoginPage> {
                     builder: (context, dark, _) {
                       return Text(
                         'Don\'t have an account? Register',
-                        style: TextStyle(color: dark ? Colors.white : Colors.black),
+                        style: TextStyle(
+                          color: dark ? Colors.white : Colors.black,
+                        ),
                       );
-                    }
+                    },
                   ),
                 ),
               ],

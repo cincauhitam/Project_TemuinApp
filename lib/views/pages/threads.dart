@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_flutter/views/widgets/appbar_widget.dart';
-import 'package:project_flutter/views/widgets/main_scaffold.dart';
 
 class ThreadsPage extends StatefulWidget {
   const ThreadsPage({super.key});

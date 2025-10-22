@@ -1,11 +1,9 @@
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
-import 'package:project_flutter/views/pages/new%20user%20flow/set_up_profile.dart';
-import 'package:project_flutter/views/pages/register_page.dart';
 import 'package:project_flutter/views/widget_tree.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -31,7 +29,7 @@ class _MyAppState extends State<MyApp> {
               brightness: value ? Brightness.dark : Brightness.light,
             ),
           ),
-          home: RegisterPage(),
+          home: WidgetTree(),
         );
       },
     );
