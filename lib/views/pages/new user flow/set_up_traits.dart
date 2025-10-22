@@ -84,7 +84,14 @@ class _SetUpTraitsState extends State<SetUpTraits> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("")),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop(); // This will go back to SetUpProfile
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -117,12 +124,14 @@ class _SetUpTraitsState extends State<SetUpTraits> {
                     // Handle done action
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const WidgetTree()),
+                      MaterialPageRoute(
+                        builder: (context) => const WidgetTree(),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(1000, 239, 230, 222),
-                    padding: const EdgeInsets.symmetric(vertical: 14,),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

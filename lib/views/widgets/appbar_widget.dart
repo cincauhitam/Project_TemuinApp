@@ -13,18 +13,18 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       actions: [
         IconButton(
-          icon: Icon(Icons.message),
+          icon: Icon(Icons.notification_important),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MessagesPage(),));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const Notifications(),));
           },
         ),
         IconButton(
           onPressed: () {
             // Handle notification button press
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Notifications(),));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MessagesPage(),));
 
           },
-          icon: Icon(Icons.notifications),
+          icon: Icon(Icons.message),
         ),
       ],
       title: ValueListenableBuilder(

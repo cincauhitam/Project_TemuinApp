@@ -59,7 +59,7 @@ class NavbarWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: NavigationDestination(
-                      icon: Icon(Icons.mark_unread_chat_alt_outlined, size: 35, color: iconColor),
+                      icon: Icon(Icons.post_add, size: 35, color: iconColor),
                       label: "",
                     ),
                   ),
