@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/services/auth_services.dart';
-import 'package:project_flutter/views/pages/set_up_profile.dart';
+import 'package:project_flutter/views/pages/new%20user%20flow/set_up_profile.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -191,22 +191,22 @@ class _RegisterPageState extends State<RegisterPage> {
                           setState(() => isLoading = true);
 
                           try {
-                            // ✅ Step 1: Register new user
-                            final registerResult = await AuthService().register(
-                              email,
-                              password,
-                            );
-                            log("User registered: $registerResult");
+                            // // ✅ Step 1: Register new user
+                            // final registerResult = await AuthService().register(
+                            //   email,
+                            //   password,
+                            // );
+                            // log("User registered: $registerResult");
 
-                            // // ✅ Step 2: Automatically log in user
-                            final loginResult = await AuthService().login(
-                              email,
-                              password,
-                            );
-                            log("User logged in automatically: $loginResult");
+                            // // // ✅ Step 2: Automatically log in user
+                            // final loginResult = await AuthService().login(
+                            //   email,
+                            //   password,
+                            // );
+                            // log("User logged in automatically: $loginResult");
 
                             // ✅ Step 3: Navigate to main app
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const SetUpProfile(),

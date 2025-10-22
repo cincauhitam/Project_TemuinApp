@@ -5,16 +5,17 @@ import 'package:project_flutter/views/pages/community_page.dart';
 import 'package:project_flutter/views/pages/home_page.dart';
 import 'package:project_flutter/views/pages/profile_page.dart';
 import 'package:project_flutter/views/pages/messages_page.dart';
+import 'package:project_flutter/views/pages/threads.dart';
 import 'package:project_flutter/views/widgets/main_scaffold.dart';
 
-List<String> titles = ["Profile", "Community", "Activity", "Home", "Messages","Settings"];
+List<String> titles = ["Profile", "Community", "Activity", "Home", "Threads","Settings"];
 
 List<Widget> pages = [
   ProfilePage(),
   CommunityPage(),
   ActivityPage(),
   HomePage(),
-  MessagesPage(),
+  ThreadsPage(),
 ];
 
 class WidgetTree extends StatefulWidget {
