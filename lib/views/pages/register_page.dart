@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/services/auth_services.dart';
 import 'package:project_flutter/views/pages/set_up_profile.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
@@ -253,9 +254,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     );
                   },
-                  child: const Text(
-                    'Already have an account? Login',
-                    style: TextStyle(color: Colors.white),
+                  child: ValueListenableBuilder(
+                    valueListenable: isDarkMode,
+                    builder: (context, dark, _) {
+                      return Text(
+                        'Already have an account? Login',
+                        style: TextStyle(color:  dark? Colors.white: Colors.black),
+                      );
+                    }
                   ),
                 ),
               ),

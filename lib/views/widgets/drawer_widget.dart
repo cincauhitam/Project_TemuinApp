@@ -77,6 +77,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 },
               ),
               ListTile(
+                leading: Icon( isDarkMode.value ?  Icons.dark_mode : Icons.light_mode),
+                title: const Text('Light Mode'),
+                onTap: () {
+                  isDarkMode.value = !isDarkMode.value;
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),
                 onTap: () {
