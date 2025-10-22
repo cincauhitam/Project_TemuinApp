@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class MessagesPage extends StatefulWidget {
-  const MessagesPage({super.key});
+class Notifications extends StatefulWidget {
+  const Notifications({super.key});
 
   @override
-  State<MessagesPage> createState() => _MessagesPageState();
+  State<Notifications> createState() => _NotificationsState();
 }
 
-class _MessagesPageState extends State<MessagesPage> {
+class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +18,9 @@ class _MessagesPageState extends State<MessagesPage> {
             Navigator.of(context).pop(); // Go back to previous page
           },
         ),
-        title: const Text('Messages'),
+        title: const Text('Notifications Page'),
       ),
-      body: const Center(
-        child: Text('This is the Messages Page'),
-      ),
+      body: const Center(child: Text('This is the Notifications Page')),
     );
   }
 }
