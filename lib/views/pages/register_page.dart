@@ -1,9 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
-import 'package:project_flutter/services/auth_services.dart';
-import 'package:project_flutter/views/pages/new%20user%20flow/set_up_profile.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
+import 'package:project_flutter/views/pages/register%20flow/set_up_profile.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -145,99 +144,112 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 width: double.infinity,
                 height: 48,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(1000, 83, 104, 120),
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                          final email = emailController.text.trim();
-                          final reEmail = reenterEmailController.text.trim();
-                          final password = passwordController.text.trim();
-                          final rePassword = reenterPasswordController.text
-                              .trim();
+                child: ValueListenableBuilder(
+                  valueListenable: isDarkMode,
+                  builder: (context, dark, _) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: dark
+                            ? const Color.fromARGB(1000, 239, 230, 222)
+                            : const Color.fromARGB(1000, 154, 0, 2),
+                        foregroundColor: dark
+                            ? const Color.fromARGB(1000, 154, 0, 2)
+                            : const Color.fromARGB(1000, 239, 230, 222),
+                      ),
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              final email = emailController.text.trim();
+                              final reEmail = reenterEmailController.text
+                                  .trim();
+                              final password = passwordController.text.trim();
+                              final rePassword = reenterPasswordController.text
+                                  .trim();
 
-                          if (email != reEmail) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Emails don't match"),
-                              ),
-                            );
-                            return;
-                          }
+                              if (email != reEmail) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Emails don't match"),
+                                  ),
+                                );
+                                return;
+                              }
 
-                          if (password != rePassword) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Passwords don't match"),
-                              ),
-                            );
-                            return;
-                          }
+                              if (password != rePassword) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Passwords don't match"),
+                                  ),
+                                );
+                                return;
+                              }
 
-                          if (!privacyPolicy) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "You must agree to the privacy policy",
-                                ),
-                              ),
-                            );
-                            return;
-                          }
+                              if (!privacyPolicy) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "You must agree to the privacy policy",
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
 
-                          setState(() => isLoading = true);
+                              setState(() => isLoading = true);
 
-                          try {
-                            // // ✅ Step 1: Register new user
-                            // final registerResult = await AuthService().register(
-                            //   email,
-                            //   password,
-                            // );
-                            // log("User registered: $registerResult");
+                              try {
+                                // // ✅ Step 1: Register new user
+                                // final registerResult = await AuthService().register(
+                                //   email,
+                                //   password,
+                                // );
+                                // log("User registered: $registerResult");
 
-                            // // // ✅ Step 2: Automatically log in user
-                            // final loginResult = await AuthService().login(
-                            //   email,
-                            //   password,
-                            // );
-                            // log("User logged in automatically: $loginResult");
+                                // // // ✅ Step 2: Automatically log in user
+                                // final loginResult = await AuthService().login(
+                                //   email,
+                                //   password,
+                                // );
+                                // log("User logged in automatically: $loginResult");
 
-                            // ✅ Step 3: Navigate to main app
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SetUpProfile(),
-                              ),
-                            );
+                                // ✅ Step 3: Navigate to main app
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SetUpProfile(),
+                                  ),
+                                );
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Registration successful! Logged in automatically.",
-                                ),
-                              ),
-                            );
-                          } catch (e, stack) {
-                            log(
-                              "Registration failed",
-                              error: e,
-                              stackTrace: stack,
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Registration failed: $e"),
-                              ),
-                            );
-                          } finally {
-                            setState(() => isLoading = false);
-                          }
-                        },
-                  child: isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Register', style: TextStyle(fontSize: 18)),
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      "Registration successful! Logged in automatically.",
+                                    ),
+                                  ),
+                                );
+                              } catch (e, stack) {
+                                log(
+                                  "Registration failed",
+                                  error: e,
+                                  stackTrace: stack,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Registration failed: $e"),
+                                  ),
+                                );
+                              } finally {
+                                setState(() => isLoading = false);
+                              }
+                            },
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Register',
+                              style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),
+                            ),
+                    );
+                  },
                 ),
               ),
 
@@ -259,9 +271,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     builder: (context, dark, _) {
                       return Text(
                         'Already have an account? Login',
-                        style: TextStyle(color:  dark? Colors.white: Colors.black),
+                        style: TextStyle(
+                          color: dark ? Colors.white : Colors.black,
+                        ),
                       );
-                    }
+                    },
                   ),
                 ),
               ),
