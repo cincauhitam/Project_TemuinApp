@@ -24,147 +24,197 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Center(
-                child: Text(
-                  "Register Account",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(height: 30),
+    return ValueListenableBuilder<bool>(
+      valueListenable: isDarkMode,
+      builder: (context, dark, _) {
+        final backgroundColor = dark ? const Color(0xFF001010) : Colors.white;
+        final textColor = dark ? Colors.white : Colors.black;
+        final inputFillColor =
+            dark ? const Color(0xFF002020) : const Color(0xFFF7F7F7);
+        final buttonColor =
+            dark ? const Color(0xFFEFE6DE) : const Color(0xFF9A0002);
+        final buttonTextColor = dark ? Colors.black : Colors.white;
 
-              // Email field
-              const Text(
-                "Email",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 18),
-                child: TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter your email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+        return Scaffold(
+          backgroundColor: backgroundColor,
+          body: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      "Register Account",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: textColor,
+                      ),
                     ),
                   ),
-                ),
-              ),
+                  const SizedBox(height: 30),
 
-              // Re-enter email field
-              const Text(
-                "Re-enter Email",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 18),
-                child: TextFormField(
-                  controller: reenterEmailController,
-                  decoration: InputDecoration(
-                    labelText: 'Re-enter your email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+                  // Email field
+                  Text(
+                    "Email",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
                     ),
                   ),
-                ),
-              ),
-
-              // Password field
-              const Text(
-                "Password",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 18),
-                child: TextFormField(
-                  keyboardType: TextInputType.visiblePassword,
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Enter your password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 18),
+                    child: TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Enter your email',
+                        labelStyle:
+                            TextStyle(color: textColor.withOpacity(0.6)),
+                        filled: true,
+                        fillColor: inputFillColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      style: TextStyle(color: textColor),
                     ),
                   ),
-                ),
-              ),
 
-              // Re-enter password
-              const Text(
-                "Re-enter Password",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 18),
-                child: TextFormField(
-                  controller: reenterPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Re-enter your password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+                  // Re-enter email field
+                  Text(
+                    "Re-enter Email",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
                     ),
                   ),
-                ),
-              ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 18),
+                    child: TextFormField(
+                      controller: reenterEmailController,
+                      decoration: InputDecoration(
+                        labelText: 'Re-enter your email',
+                        labelStyle:
+                            TextStyle(color: textColor.withOpacity(0.6)),
+                        filled: true,
+                        fillColor: inputFillColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      style: TextStyle(color: textColor),
+                    ),
+                  ),
 
-              const SizedBox(height: 16),
+                  // Password field
+                  Text(
+                    "Password",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 18),
+                    child: TextFormField(
+                      keyboardType: TextInputType.visiblePassword,
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Enter your password',
+                        labelStyle:
+                            TextStyle(color: textColor.withOpacity(0.6)),
+                        filled: true,
+                        fillColor: inputFillColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      style: TextStyle(color: textColor),
+                    ),
+                  ),
 
-              // Checkboxes
-              CheckboxListTile(
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-                title: const Text('Receive news and updates'),
-                value: receiveNews,
-                onChanged: (bool? value) {
-                  setState(() => receiveNews = value ?? false);
-                },
-              ),
+                  // Re-enter password
+                  Text(
+                    "Re-enter Password",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 18),
+                    child: TextFormField(
+                      controller: reenterPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Re-enter your password',
+                        labelStyle:
+                            TextStyle(color: textColor.withOpacity(0.6)),
+                        filled: true,
+                        fillColor: inputFillColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      style: TextStyle(color: textColor),
+                    ),
+                  ),
 
-              CheckboxListTile(
-                contentPadding: EdgeInsets.zero,
-                controlAffinity: ListTileControlAffinity.leading,
-                title: const Text('Agree to privacy policy'),
-                value: privacyPolicy,
-                onChanged: (bool? value) {
-                  setState(() => privacyPolicy = value ?? false);
-                },
-              ),
+                  const SizedBox(height: 16),
 
-              const SizedBox(height: 24),
+                  // Checkboxes
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text(
+                      'Receive news and updates',
+                      style: TextStyle(color: textColor),
+                    ),
+                    value: receiveNews,
+                    onChanged: (bool? value) {
+                      setState(() => receiveNews = value ?? false);
+                    },
+                  ),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text(
+                      'Agree to privacy policy',
+                      style: TextStyle(color: textColor),
+                    ),
+                    value: privacyPolicy,
+                    onChanged: (bool? value) {
+                      setState(() => privacyPolicy = value ?? false);
+                    },
+                  ),
 
-              // Register button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ValueListenableBuilder(
-                  valueListenable: isDarkMode,
-                  builder: (context, dark, _) {
-                    return ElevatedButton(
+                  const SizedBox(height: 24),
+
+                  // Register button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: dark
-                            ? const Color.fromARGB(1000, 239, 230, 222)
-                            : const Color.fromARGB(1000, 154, 0, 2),
-                        foregroundColor: dark
-                            ? const Color.fromARGB(1000, 154, 0, 2)
-                            : const Color.fromARGB(1000, 239, 230, 222),
+                        backgroundColor: buttonColor,
+                        foregroundColor: buttonTextColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                       ),
                       onPressed: isLoading
                           ? null
                           : () async {
                               final email = emailController.text.trim();
-                              final reEmail = reenterEmailController.text
-                                  .trim();
-                              final password = passwordController.text.trim();
-                              final rePassword = reenterPasswordController.text
-                                  .trim();
+                              final reEmail =
+                                  reenterEmailController.text.trim();
+                              final password =
+                                  passwordController.text.trim();
+                              final rePassword =
+                                  reenterPasswordController.text.trim();
 
                               if (email != reEmail) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -198,25 +248,15 @@ class _RegisterPageState extends State<RegisterPage> {
                               setState(() => isLoading = true);
 
                               try {
-                                // // ✅ Step 1: Register new user
-                                // final registerResult = await AuthService().register(
-                                //   email,
-                                //   password,
-                                // );
-                                // log("User registered: $registerResult");
+                                // Simulate registration process
+                                await Future.delayed(
+                                    const Duration(seconds: 1));
 
-                                // // // ✅ Step 2: Automatically log in user
-                                // final loginResult = await AuthService().login(
-                                //   email,
-                                //   password,
-                                // );
-                                // log("User logged in automatically: $loginResult");
-
-                                // ✅ Step 3: Navigate to main app
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const SetUpProfile(),
+                                    builder: (context) =>
+                                        const SetUpProfile(),
                                   ),
                                 );
 
@@ -243,46 +283,44 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                             },
                       child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
                           : const Text(
                               'Register',
-                              style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                    );
-                  },
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // Back to login
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  },
-                  child: ValueListenableBuilder(
-                    valueListenable: isDarkMode,
-                    builder: (context, dark, _) {
-                      return Text(
-                        'Already have an account? Login',
-                        style: TextStyle(
-                          color: dark ? Colors.white : Colors.black,
-                        ),
-                      );
-                    },
+                    ),
                   ),
-                ),
+
+                  const SizedBox(height: 10),
+
+                  // Back to login
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Already have an account? Login',
+                        style: TextStyle(color: textColor),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

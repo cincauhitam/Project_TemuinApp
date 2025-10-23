@@ -27,14 +27,15 @@ class _SetUpProfileState extends State<SetUpProfile> {
         return ValueListenableBuilder(
           valueListenable: isDarkMode,
           builder: (context, dark, child) {
+            final bgColor =
+                dark ? const Color(0xFFEFE6DE) : const Color(0xFF9A0002);
+            final textColor =
+                dark ? const Color(0xFF9A0002) : const Color(0xFFEFE6DE);
+
             return Container(
               height: 300,
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: dark
-                    ? const Color.fromARGB(1000, 239, 230, 222)
-                    : const Color.fromARGB(1000, 154, 0, 2),
-              ),
+              color: bgColor,
               child: Column(
                 children: [
                   const SizedBox(height: 10),
@@ -43,241 +44,50 @@ class _SetUpProfileState extends State<SetUpProfile> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: dark
-                          ? const Color.fromARGB(1000, 154, 0, 2)
-                          : const Color.fromARGB(1000, 239, 230, 222),
+                      color: textColor,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Expanded(
                     child: Row(
                       children: [
-                        // Day picker
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                "DAY",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: dark
-                                      ? const Color.fromARGB(1000, 154, 0, 2)
-                                      : const Color.fromARGB(1000, 239, 230, 222),
-                                ),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    ListWheelScrollView(
-                                      itemExtent: 40,
-                                      perspective: 0.005,
-                                      diameterRatio: 1.5,
-                                      onSelectedItemChanged: (index) {
-                                        setState(() {
-                                          selectedDay = days[index];
-                                        });
-                                      },
-                                      children: days.map((day) {
-                                        return Container(
-                                          height: 40,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            day.toString().padLeft(2, '0'),
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: selectedDay == day 
-                                                  ? FontWeight.bold 
-                                                  : FontWeight.normal,
-                                              color: dark
-                                                  ? const Color.fromARGB(1000, 154, 0, 2)
-                                                  : const Color.fromARGB(1000, 239, 230, 222),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    // Highlight box
-                                    IgnorePointer(
-                                      child: Center(
-                                        child: Container(
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: dark
-                                                  ? const Color.fromARGB(1000, 154, 0, 2)
-                                                  : const Color.fromARGB(1000, 239, 230, 222),
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                        _buildPickerColumn(
+                          title: "DAY",
+                          items: days,
+                          selected: selectedDay,
+                          onChange: (val) => setState(() => selectedDay = val),
+                          dark: dark,
                         ),
-
-                        // Month picker
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                "MONTH",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: dark
-                                      ? const Color.fromARGB(1000, 154, 0, 2)
-                                      : const Color.fromARGB(1000, 239, 230, 222),
-                                ),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    ListWheelScrollView(
-                                      itemExtent: 40,
-                                      perspective: 0.005,
-                                      diameterRatio: 1.5,
-                                      onSelectedItemChanged: (index) {
-                                        setState(() {
-                                          selectedMonth = months[index];
-                                        });
-                                      },
-                                      children: months.map((month) {
-                                        return Container(
-                                          height: 40,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            month.toString().padLeft(2, '0'),
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: selectedMonth == month 
-                                                  ? FontWeight.bold 
-                                                  : FontWeight.normal,
-                                              color: dark
-                                                  ? const Color.fromARGB(1000, 154, 0, 2)
-                                                  : const Color.fromARGB(1000, 239, 230, 222),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    // Highlight box
-                                    IgnorePointer(
-                                      child: Center(
-                                        child: Container(
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: dark
-                                                  ? const Color.fromARGB(1000, 154, 0, 2)
-                                                  : const Color.fromARGB(1000, 239, 230, 222),
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                        _buildPickerColumn(
+                          title: "MONTH",
+                          items: months,
+                          selected: selectedMonth,
+                          onChange: (val) => setState(() => selectedMonth = val),
+                          dark: dark,
                         ),
-
-                        // Year picker
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                "YEAR",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: dark
-                                      ? const Color.fromARGB(1000, 154, 0, 2)
-                                      : const Color.fromARGB(1000, 239, 230, 222),
-                                ),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    ListWheelScrollView(
-                                      itemExtent: 40,
-                                      perspective: 0.005,
-                                      diameterRatio: 1.5,
-                                      onSelectedItemChanged: (index) {
-                                        setState(() {
-                                          selectedYear = years[index];
-                                        });
-                                      },
-                                      children: years.map((year) {
-                                        return Container(
-                                          height: 40,
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            year.toString(),
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: selectedYear == year 
-                                                  ? FontWeight.bold 
-                                                  : FontWeight.normal,
-                                              color: dark
-                                                  ? const Color.fromARGB(1000, 154, 0, 2)
-                                                  : const Color.fromARGB(1000, 239, 230, 222),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    // Highlight box
-                                    IgnorePointer(
-                                      child: Center(
-                                        child: Container(
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: dark
-                                                  ? const Color.fromARGB(1000, 154, 0, 2)
-                                                  : const Color.fromARGB(1000, 239, 230, 222),
-                                              width: 2,
-                                            ),
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                        _buildPickerColumn(
+                          title: "YEAR",
+                          items: years,
+                          selected: selectedYear,
+                          onChange: (val) => setState(() => selectedYear = val),
+                          dark: dark,
                         ),
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: dark
-                          ? const Color.fromARGB(1000, 154, 0, 2)
-                          : const Color.fromARGB(1000, 239, 230, 222),
+                      backgroundColor:
+                          dark ? const Color(0xFF9A0002) : const Color(0xFFEFE6DE),
                     ),
                     child: Text(
                       "CONFIRM",
                       style: TextStyle(
                         color: dark
-                            ? const Color.fromARGB(1000, 239, 230, 222)
-                            : const Color.fromARGB(1000, 154, 0, 2)
+                            ? const Color(0xFFEFE6DE)
+                            : const Color(0xFF9A0002),
                       ),
                     ),
                   ),
@@ -290,189 +100,160 @@ class _SetUpProfileState extends State<SetUpProfile> {
     );
   }
 
-  String get formattedDate {
-    return '${selectedDay.toString().padLeft(2, '0')}/${selectedMonth.toString().padLeft(2, '0')}/$selectedYear';
+  Widget _buildPickerColumn({
+    required String title,
+    required List<int> items,
+    required int selected,
+    required Function(int) onChange,
+    required bool dark,
+  }) {
+    final highlightColor =
+        dark ? const Color(0xFF9A0002) : const Color(0xFFEFE6DE);
+
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: highlightColor,
+            ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                ListWheelScrollView(
+                  itemExtent: 40,
+                  perspective: 0.005,
+                  diameterRatio: 1.5,
+                  onSelectedItemChanged: (index) => onChange(items[index]),
+                  children: items.map((item) {
+                    return Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        item.toString().padLeft(2, '0'),
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: selected == item
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: highlightColor,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                IgnorePointer(
+                  child: Center(
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: highlightColor, width: 2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+
+  String get formattedDate =>
+      '${selectedDay.toString().padLeft(2, '0')}/${selectedMonth.toString().padLeft(2, '0')}/$selectedYear';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-      ),
-      body: ValueListenableBuilder(
-        valueListenable: isDarkMode,
-        builder: (context, value, child) {
-          return Padding(
+    return ValueListenableBuilder(
+      valueListenable: isDarkMode,
+      builder: (context, dark, _) {
+        final bgColor = dark ? const Color(0xFF001010) : Colors.white;
+        final textColor = dark ? Colors.white : Colors.black;
+        final buttonColor = dark ? const Color(0xFFEFE6DE) : const Color(0xFF9A0002);
+        final buttonTextColor = dark ? const Color(0xFF9A0002) : Colors.white;
+
+        return Scaffold(
+          backgroundColor: bgColor,
+          appBar: AppBar(
+            backgroundColor: bgColor,
+            iconTheme: IconThemeData(color: textColor),
+            elevation: 0,
+          ),
+          body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                // Image at the top
+                // Top image
                 Image.asset(
-                  'assets/images/waving_cartoon.png', // Replace with your actual image path
+                  'assets/images/waving_cartoon.png',
                   height: 200,
                   width: 300,
                   fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 30),
 
-                // Name Input Section - Centered
+                // Name input
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       "Let us know your name!",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: textColor,
                       ),
                     ),
                     const SizedBox(height: 15),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextField(
-                        controller: _nameController,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: "Enter your name",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 12,
-                          ),
+                    TextField(
+                      controller: _nameController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        hintText: "Enter your name",
+                        hintStyle:
+                            TextStyle(color: textColor.withOpacity(0.5)),
+                        fillColor:
+                            dark ? const Color(0xFF002020) : const Color(0xFFF7F7F7),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 12,
                         ),
                       ),
+                      style: TextStyle(color: textColor),
                     ),
                   ],
                 ),
 
                 const Spacer(flex: 1),
 
-                // Birth Date Section - Centered
+                // Birth date section
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       "Your birth date",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                        color: textColor,
                       ),
                     ),
-                    const SizedBox(height: 15),
-
-                    // Individual date displays in 3 rows
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // Day
-                        GestureDetector(
-                          onTap: _showDatePicker,
-                          child: Container(
-                            width: 100,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              children: [
-                                const Text(
-                                  "DAY",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  selectedDay.toString().padLeft(2, '0'),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Month
-                        GestureDetector(
-                          onTap: _showDatePicker,
-                          child: Container(
-                            width: 100,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              children: [
-                                const Text(
-                                  "MONTH",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  selectedMonth.toString().padLeft(2, '0'),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Year
-                        GestureDetector(
-                          onTap: _showDatePicker,
-                          child: Container(
-                            width: 100,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey.shade300),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              children: [
-                                const Text(
-                                  "YEAR",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  selectedYear.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        _buildDateBox("DAY", selectedDay.toString(), dark),
+                        _buildDateBox("MONTH", selectedMonth.toString(), dark),
+                        _buildDateBox("YEAR", selectedYear.toString(), dark),
                       ],
                     ),
                   ],
@@ -480,7 +261,7 @@ class _SetUpProfileState extends State<SetUpProfile> {
 
                 const Spacer(flex: 2),
 
-                // Proceed Button
+                // Proceed button
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50),
                   child: ElevatedButton(
@@ -491,38 +272,68 @@ class _SetUpProfileState extends State<SetUpProfile> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: value
-                          ? const Color.fromARGB(1000, 239, 230, 222)
-                          : const Color.fromARGB(1000, 154, 0, 2),
+                      backgroundColor: buttonColor,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 100,
                         vertical: 20,
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
                       ),
                     ),
-                    child: ValueListenableBuilder(
-                      valueListenable: isDarkMode,
-                      builder: (context, Dark, _) {
-                        return Text(
-                          "PROCEED",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Dark
-                                ? const Color.fromARGB(1000, 154, 0, 2)
-                                : const Color.fromARGB(1000, 239, 230, 222),
-                          ),
-                        );
-                      },
+                    child: Text(
+                      "PROCEED",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: buttonTextColor,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
-          );
-        },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDateBox(String label, String value, bool dark) {
+    final borderColor =
+        dark ? Colors.white.withOpacity(0.4) : Colors.grey.shade300;
+    final textColor = dark ? Colors.white : Colors.black;
+
+    return GestureDetector(
+      onTap: _showDatePicker,
+      child: Container(
+        width: 100,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: borderColor),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value.padLeft(2, '0'),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
