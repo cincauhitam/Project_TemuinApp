@@ -31,7 +31,7 @@ class NavbarWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: NavigationDestination(
-                      icon: Icon(Icons.home, size: 35, color: iconColor),
+                      icon: Icon(Icons.person_2_rounded, size: 35, color: iconColor),
                       label: "",
                     ),
                   ),

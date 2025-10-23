@@ -43,34 +43,29 @@ class _SetUpTraitsState extends State<SetUpTraits> {
       child: ValueListenableBuilder(
         valueListenable: isDarkMode,
         builder: (context, dark, _) {
+          final borderColor = dark ? Colors.white : Colors.black;
+          final textColor = dark ? const Color(0xFFEFE6DE) : Colors.black;
+          final selectedBg = dark
+              ? const Color(0xFF9A0002)
+              : const Color(0xFF9A0002).withOpacity(0.1);
+
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color.fromARGB(232, 245, 237, 186)
-                  : const Color.fromARGB(0, 135, 134, 134),
+              color: isSelected ? selectedBg : Colors.transparent,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: dark
-                    ? const Color.fromARGB(255, 251, 251, 251)
-                    : const Color.fromARGB(255, 0, 0, 0),
-                width: 1.2,
-              ),
+              border: Border.all(color: borderColor, width: 1.2),
             ),
-            child: ValueListenableBuilder(
-              valueListenable: isDarkMode,
-              builder: (context, darkMode, child) {
-                return Text(
-                  tag,
-                  style: TextStyle(
-                    color: dark
-                        ? const Color.fromARGB(255, 232, 90, 90)
-                        : const Color.fromARGB(255, 0, 0, 0),
-                    fontWeight: FontWeight.w500,
-                  ),
-                );
-              },
+            child: Text(
+              tag,
+              style: TextStyle(
+                color: isSelected
+                    ? (dark ? const Color(0xFFEFE6DE) : const Color(0xFF9A0002))
+                    : textColor,
+                fontWeight:
+                    isSelected ? FontWeight.w700 : FontWeight.normal,
+              ),
             ),
           );
         },
@@ -79,64 +74,82 @@ class _SetUpTraitsState extends State<SetUpTraits> {
   }
 
   Widget buildCategory(String title, List<String> tags) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Wrap(children: tags.map(buildTag).toList()),
-        const SizedBox(height: 20),
-      ],
+    return ValueListenableBuilder(
+      valueListenable: isDarkMode,
+      builder: (context, dark, _) {
+        final titleColor = dark ? const Color(0xFFEFE6DE) : Colors.black;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: titleColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(children: tags.map(buildTag).toList()),
+            const SizedBox(height: 20),
+          ],
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop(); // This will go back to SetUpProfile
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Center(
-              child: Text(
-                "Pick your poison",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(height: 35),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildCategory('Sport', sports),
-                    buildCategory('Gender', genders),
-                    buildCategory('What are you here for?', purposes),
-                  ],
+    return ValueListenableBuilder(
+      valueListenable: isDarkMode,
+      builder: (context, dark, _) {
+        final bgColor = dark ? const Color(0xFF001010) : Colors.white;
+        final textColor = dark ? const Color(0xFFEFE6DE) : Colors.black;
+        final buttonColor =
+            dark ? const Color(0xFFEFE6DE) : const Color(0xFF9A0002);
+        final buttonTextColor =
+            dark ? const Color(0xFF9A0002) : const Color(0xFFEFE6DE);
+
+        return Scaffold(
+          backgroundColor: bgColor,
+          appBar: AppBar(
+            backgroundColor: bgColor,
+            elevation: 0,
+            iconTheme: IconThemeData(color: textColor),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Center(
+                  child: Text(
+                    "Pick your poison",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ValueListenableBuilder(
-                  valueListenable: isDarkMode,
-                  builder: (context, dark, _) {
-                    return ElevatedButton(
+                const SizedBox(height: 35),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildCategory('Sport', sports),
+                        buildCategory('Gender', genders),
+                        buildCategory('What are you here for?', purposes),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
                       onPressed: () {
-                        // Handle done action
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -145,37 +158,29 @@ class _SetUpTraitsState extends State<SetUpTraits> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: dark
-                            ? const Color.fromARGB(1000, 239, 230, 222)
-                            : const Color.fromARGB(1000, 154, 0, 2),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: buttonColor,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        "DONE",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: buttonTextColor,
                         ),
                       ),
-                      child: ValueListenableBuilder(
-                        valueListenable: isDarkMode,
-                        builder: (context, isDarkMode, _) {
-                          return Text(
-                            "DONE",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: isDarkMode
-                                  ? Color.fromARGB(1000, 154, 0, 2)
-                                  : const Color.fromARGB(1000, 239, 230, 222),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

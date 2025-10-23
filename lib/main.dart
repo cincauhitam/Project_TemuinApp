@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
+import 'package:project_flutter/views/pages/profile_page.dart';
 import 'package:project_flutter/views/widget_tree.dart';
 
 void main() {
@@ -26,7 +27,7 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 0, 213, 255),
-              brightness: value ? Brightness.dark : Brightness.light,
+              brightness: value ? Brightness.light : Brightness.dark,
             ),
           ),
           home: WidgetTree(),

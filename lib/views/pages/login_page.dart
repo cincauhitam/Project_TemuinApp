@@ -13,106 +13,131 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool rememberMe = false;
-  bool privacyPolicy = false;
 
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: ValueListenableBuilder<bool>(
-              valueListenable: isDarkMode,
-              builder: (context, value, _) =>
-                  Icon(value ? Icons.dark_mode : Icons.light_mode),
-            ),
-            onPressed: () {
-              isDarkMode.value = !isDarkMode.value;
-            },
+    return ValueListenableBuilder<bool>(
+      valueListenable: isDarkMode,
+      builder: (context, dark, _) {
+        return Scaffold(
+          backgroundColor: dark ? const Color(0xFF001010) : Colors.white,
+          appBar: AppBar(
+            backgroundColor: dark ? const Color(0xFF001010) : Colors.white,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  dark ? Icons.dark_mode : Icons.light_mode,
+                  color: dark ? Colors.white : Colors.black,
+                ),
+                onPressed: () {
+                  isDarkMode.value = !isDarkMode.value;
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                // Image on top
-                Image.asset(
-                  'assets/images/test_icon.png',
-                  height: 250,
-                  alignment: Alignment.topCenter,
-                ),
-                const SizedBox(height: 50),
-
-                // Username field
-                TextFormField(
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Email cannot be empty';
-                    } else if (!value.contains('@')) {
-                      return 'Invalid email';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    // Image on top
+                    Image.asset(
+                      'assets/images/test_icon.png',
+                      height: 250,
+                      alignment: Alignment.topCenter,
                     ),
-                  ),
-                ),
-                const SizedBox(height: 30),
+                    const SizedBox(height: 50),
 
-                // Password field
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
+                    // Username field
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email cannot be empty';
+                        } else if (!value.contains('@')) {
+                          return 'Invalid email';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        labelStyle: TextStyle(
+                          color: dark ? Colors.white70 : Colors.black54,
+                        ),
+                        filled: true,
+                        fillColor: dark
+                            ? const Color(0xFF002020)
+                            : const Color(0xFFF8F8F8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: dark ? Colors.white : Colors.black,
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                    const SizedBox(height: 30),
 
-                // Remember me
-                CheckboxListTile.adaptive(
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: const Text('Remember me'),
-                  value: rememberMe,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      rememberMe = value ?? false;
-                    });
-                  },
-                ),
+                    // Password field
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(
+                          color: dark ? Colors.white70 : Colors.black54,
+                        ),
+                        filled: true,
+                        fillColor: dark
+                            ? const Color(0xFF002020)
+                            : const Color(0xFFF8F8F8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      style: TextStyle(
+                        color: dark ? Colors.white : Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
 
-                // Privacy policy
-                const SizedBox(height: 24),
+                    // Remember me
+                    CheckboxListTile.adaptive(
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text(
+                        'Remember me',
+                        style: TextStyle(
+                          color: dark ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      value: rememberMe,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          rememberMe = value ?? false;
+                        });
+                      },
+                    ),
 
-                // LOGIN button (dark mode adaptive)
-                ValueListenableBuilder<bool>(
-                  valueListenable: isDarkMode,
-                  builder: (context, dark, _) {
-                    return SizedBox(
+                    const SizedBox(height: 24),
+
+                    // LOGIN button
+                    SizedBox(
                       width: double.infinity,
                       height: 48,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: dark
-                              ? const Color.fromARGB(1000, 239, 230, 222)
-                              : const Color.fromARGB(1000, 154, 0, 2),
+                              ? const Color(0xFFEFE6DE)
+                              : const Color(0xFF9A0002),
                           foregroundColor: dark ? Colors.black : Colors.white,
                         ),
                         onPressed: () async {
@@ -120,10 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                           final password = passwordController.text;
 
                           try {
-                            final result = await AuthService().login(
-                              email,
-                              password,
-                            );
+                            final result =
+                                await AuthService().login(email, password);
                             print("User logged in: $result");
 
                             Navigator.pushReplacement(
@@ -143,15 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
 
-                // CONTINUE WITH GOOGLE button (dark mode adaptive)
-                ValueListenableBuilder<bool>(
-                  valueListenable: isDarkMode,
-                  builder: (context, dark, _) {
-                    return Padding(
+                    // CONTINUE WITH GOOGLE button
+                    Padding(
                       padding: const EdgeInsets.only(top: 30, bottom: 20),
                       child: SizedBox(
                         height: 48,
@@ -160,14 +178,12 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () async {
                             try {
                               final authService = AuthService();
-                              final result = await authService
-                                  .signInWithGoogle();
+                              final result =
+                                  await authService.signInWithGoogle();
 
                               if (result.user != null) {
                                 print(
-                                  "User logged in with Google: ${result.user!.email}",
-                                );
-
+                                    "User logged in with Google: ${result.user!.email}");
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -179,8 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Google sign-in failed: ${e.toString()}',
-                                  ),
+                                      'Google sign-in failed: ${e.toString()}'),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -188,8 +203,8 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: dark
-                                ? const Color.fromARGB(1000, 239, 230, 222)
-                                : const Color.fromARGB(1000, 154, 0, 2),
+                                ? const Color(0xFFEFE6DE)
+                                : const Color(0xFF9A0002),
                             foregroundColor: dark ? Colors.black : Colors.white,
                           ),
                           child: Padding(
@@ -215,37 +230,32 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
 
-                // Register navigation
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterPage(),
-                      ),
-                    );
-                  },
-                  child: ValueListenableBuilder(
-                    valueListenable: isDarkMode,
-                    builder: (context, dark, _) {
-                      return Text(
+                    // Register navigation
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
                         'Don\'t have an account? Register',
                         style: TextStyle(
                           color: dark ? Colors.white : Colors.black,
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
