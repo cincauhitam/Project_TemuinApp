@@ -6,6 +6,7 @@ import 'package:project_flutter/views/pages/profile_page.dart';
 import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
 import 'package:project_flutter/views/pages/register%20flow/set_up_traits.dart';
 import 'package:project_flutter/views/pages/register%20flow/stats_page.dart';
+import 'package:project_flutter/views/pages/register_page.dart';
 import 'package:project_flutter/views/widget_tree.dart';
 
 void main() {
@@ -34,7 +35,7 @@ class _MyAppState extends State<MyApp> {
                 brightness: value ? Brightness.light : Brightness.dark,
               ),
             ),
-            home: StatsPage(),
+            home: RegisterPage(),
           );
         },
       ),

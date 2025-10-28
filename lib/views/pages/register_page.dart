@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
+import 'package:project_flutter/services/auth_services.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
 import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
 
@@ -29,10 +30,12 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (context, dark, _) {
         final backgroundColor = dark ? const Color(0xFF001010) : Colors.white;
         final textColor = dark ? Colors.white : Colors.black;
-        final inputFillColor =
-            dark ? const Color(0xFF002020) : const Color(0xFFF7F7F7);
-        final buttonColor =
-            dark ? const Color(0xFFEFE6DE) : const Color(0xFF9A0002);
+        final inputFillColor = dark
+            ? const Color(0xFF002020)
+            : const Color(0xFFF7F7F7);
+        final buttonColor = dark
+            ? const Color(0xFFEFE6DE)
+            : const Color(0xFF9A0002);
         final buttonTextColor = dark ? Colors.black : Colors.white;
 
         return Scaffold(
@@ -70,8 +73,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: emailController,
                       decoration: InputDecoration(
                         labelText: 'Enter your email',
-                        labelStyle:
-                            TextStyle(color: textColor.withOpacity(0.6)),
+                        labelStyle: TextStyle(
+                          color: textColor.withOpacity(0.6),
+                        ),
                         filled: true,
                         fillColor: inputFillColor,
                         border: OutlineInputBorder(
@@ -96,8 +100,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: reenterEmailController,
                       decoration: InputDecoration(
                         labelText: 'Re-enter your email',
-                        labelStyle:
-                            TextStyle(color: textColor.withOpacity(0.6)),
+                        labelStyle: TextStyle(
+                          color: textColor.withOpacity(0.6),
+                        ),
                         filled: true,
                         fillColor: inputFillColor,
                         border: OutlineInputBorder(
@@ -124,8 +129,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Enter your password',
-                        labelStyle:
-                            TextStyle(color: textColor.withOpacity(0.6)),
+                        labelStyle: TextStyle(
+                          color: textColor.withOpacity(0.6),
+                        ),
                         filled: true,
                         fillColor: inputFillColor,
                         border: OutlineInputBorder(
@@ -151,8 +157,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Re-enter your password',
-                        labelStyle:
-                            TextStyle(color: textColor.withOpacity(0.6)),
+                        labelStyle: TextStyle(
+                          color: textColor.withOpacity(0.6),
+                        ),
                         filled: true,
                         fillColor: inputFillColor,
                         border: OutlineInputBorder(
@@ -209,12 +216,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           ? null
                           : () async {
                               final email = emailController.text.trim();
-                              final reEmail =
-                                  reenterEmailController.text.trim();
-                              final password =
-                                  passwordController.text.trim();
-                              final rePassword =
-                                  reenterPasswordController.text.trim();
+                              final reEmail = reenterEmailController.text
+                                  .trim();
+                              final password = passwordController.text.trim();
+                              final rePassword = reenterPasswordController.text
+                                  .trim();
 
                               if (email != reEmail) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -248,10 +254,21 @@ class _RegisterPageState extends State<RegisterPage> {
                               setState(() => isLoading = true);
 
                               try {
-                                // Simulate registration process
-                                await Future.delayed(
-                                    const Duration(seconds: 1));
+                                // // ✅ Step 1: Register new user
+                                final registerResult = await AuthService().register(
+                                  email,
+                                  password,
+                                );
+                                log("User registered: $registerResult");
 
+                                // // // ✅ Step 2: Automatically log in user
+                                final loginResult = await AuthService().login(
+                                  email,
+                                  password,
+                                );
+                                log("User logged in automatically: $loginResult");
+
+                                // ✅ Step 3: Navigate to main app
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -283,9 +300,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                             },
                       child: isLoading
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
+                          ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                               'Register',
                               style: TextStyle(
