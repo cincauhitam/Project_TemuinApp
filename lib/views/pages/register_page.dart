@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
-import 'package:project_flutter/views/pages/register%20flow/set_up_profile.dart';
+import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -256,7 +256,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const SetUpProfile(),
+                                        const SetUpProfileNew(),
                                   ),
                                 );
 

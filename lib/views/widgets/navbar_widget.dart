@@ -25,7 +25,7 @@ class NavbarWidget extends StatelessWidget {
                 indicatorColor: Colors.transparent,
               ),
               child: NavigationBar(
-                height: 35 + MediaQuery.of(context).padding.bottom,
+                height: 70 + MediaQuery.of(context).padding.bottom,
                 backgroundColor: navColor,
                 destinations: [
                   Padding(
@@ -43,7 +43,7 @@ class NavbarWidget extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 17),
+                    padding: const EdgeInsets.only(top: 14),
                     child: NavigationDestination(
                       icon: Icon(Icons.run_circle_outlined, size: 65, color: iconColor),
                       label: "",
