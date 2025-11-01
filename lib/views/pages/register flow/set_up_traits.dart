@@ -113,6 +113,7 @@ class _SetUpTraitsState extends State<SetUpTraits> {
         return Scaffold(
           backgroundColor: bgColor,
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: bgColor,
             elevation: 0,
             iconTheme: IconThemeData(color: textColor),
