@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/services/auth_services.dart';
+import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
 import 'package:project_flutter/views/pages/register_page.dart';
 import 'package:project_flutter/views/widget_tree.dart';
 
@@ -187,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => WidgetTree(),
+                                    builder: (context) => SetUpProfileNew(),
                                   ),
                                 );
                               }
