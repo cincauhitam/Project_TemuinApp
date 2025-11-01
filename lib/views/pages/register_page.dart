@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:developer'; // Correct import for log function
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/services/auth_services.dart';
@@ -22,6 +22,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController reenterPasswordController =
       TextEditingController();
+
+  // Use the same AuthService instance
+  final AuthService _authService = AuthService();
+  
+  get loginResponse => null;
 
   @override
   Widget build(BuildContext context) {
@@ -254,36 +259,56 @@ class _RegisterPageState extends State<RegisterPage> {
                               setState(() => isLoading = true);
 
                               try {
-                                // // ✅ Step 1: Register new user
-                                final registerResult = await AuthService().register(
-                                  email,
-                                  password,
-                                );
-                                log("User registered: $registerResult");
+                                // ✅ Step 1: Register new user using the same AuthService instance
+                                final registerResponse = await _authService
+                                    .register(email, password);
+                                if (registerResponse.user != null) {
+                                  final loginResponse = await _authService
+                                      .login(email, password);
+                                  // Now isSignedIn() should return true
+                                }
+                                //final registerResult = await _authService.register(
+                                //   email,
+                                //   password,
+                                // );
+                                log("User registered: $registerResponse");
 
-                                // // // ✅ Step 2: Automatically log in user
-                                final loginResult = await AuthService().login(
-                                  email,
-                                  password,
-                                );
-                                log("User logged in automatically: $loginResult");
-
-                                // ✅ Step 3: Navigate to main app
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SetUpProfileNew(),
-                                  ),
+                                // ✅ Step 2: Automatically log in user using the same AuthService instance
+                                // final loginResult = await _authService.login(
+                                //   email,
+                                //   password,
+                                // );
+                                log(
+                                  "User logged in automatically: $loginResponse",
                                 );
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      "Registration successful! Logged in automatically.",
+                                // ✅ Step 3: Check if user is authenticated
+                                if (_authService.isSignedIn()) {
+                                  log(
+                                    "User is authenticated, navigating to profile setup",
+                                  );
+
+                                  // ✅ Step 4: Navigate to main app
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SetUpProfileNew(),
                                     ),
-                                  ),
-                                );
+                                  );
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Registration successful! Logged in automatically.",
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  throw Exception(
+                                    "User authentication failed after login",
+                                  );
+                                }
                               } catch (e, stack) {
                                 log(
                                   "Registration failed",
