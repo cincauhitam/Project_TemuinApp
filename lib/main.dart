@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
                 brightness: value ? Brightness.light : Brightness.dark,
               ),
             ),
-            home: RegisterPage(),
+            home: SetUpProfileNew(),
           );
         },
       ),

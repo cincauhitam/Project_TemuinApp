@@ -4,7 +4,6 @@ import 'package:project_flutter/views/pages/activity_page.dart';
 import 'package:project_flutter/views/pages/community_page.dart';
 import 'package:project_flutter/views/pages/home_page.dart';
 import 'package:project_flutter/views/pages/profile_page.dart';
-import 'package:project_flutter/views/pages/messages_page.dart';
 import 'package:project_flutter/views/pages/threads.dart';
 import 'package:project_flutter/views/widgets/main_scaffold.dart';
 

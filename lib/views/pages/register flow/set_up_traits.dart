@@ -166,7 +166,7 @@ class _SetUpTraitsState extends State<SetUpTraits> {
                         elevation: 0,
                       ),
                       child: Text(
-                        "DONE",
+                        "Save Traits",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

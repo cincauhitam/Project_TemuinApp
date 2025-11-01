@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
-import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
 import 'package:project_flutter/views/pages/register%20flow/set_up_traits.dart';
-import 'package:project_flutter/views/widget_tree.dart';
 
 class StatsPage extends StatefulWidget {
-  const StatsPage({super.key});
+  final String selectedLevel;
+  final String selectedRole;
+
+  const StatsPage({
+    super.key,
+    required this.selectedLevel,
+    required this.selectedRole,
+  });
 
   @override
   State<StatsPage> createState() => _StatsPageState();
@@ -13,26 +18,47 @@ class StatsPage extends StatefulWidget {
 
 class _StatsPageState extends State<StatsPage> {
   // Stats variables
-  int pace = 50;
-  int shooting = 50;
-  int passing = 50;
-  int dribbling = 50;
-  int defending = 50;
-  int physical = 50;
+  int pace = 0;
+  int shooting = 0;
+  int passing = 0;
+  int dribbling = 0;
+  int defending = 0;
+  int physical = 0;
 
-  List<int> statsRange = List.generate(101, (index) => index);
+  // Stats ranges for different levels
+  List<int> statsRangeBeginner = List.generate(41, (index) => index);
+  List<int> statsRangeAmateur = List.generate(51, (index) => index);
+  List<int> statsRangeSemiPro = List.generate(61, (index) => index);
 
-  void _showStatPicker(String statName, int currentValue, Function(int) onStatChanged) {
+  // Get the appropriate stats range based on selected level
+  List<int> get statsRange {
+    switch (widget.selectedLevel) {
+      case "beginner":
+        return statsRangeBeginner;
+      case "amateur":
+        return statsRangeAmateur;
+      case "semi pro":
+        return statsRangeSemiPro;
+      default:
+        return statsRangeBeginner;
+    }
+  }
+
+  void _showStatPicker(
+    String statName,
+    int currentValue,
+    Function(int) onStatChanged,
+  ) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return ValueListenableBuilder<bool>(
           valueListenable: isDarkMode,
           builder: (context, darkMode, child) {
-            final bgColor = darkMode 
+            final bgColor = darkMode
                 ? const Color.fromARGB(1000, 239, 230, 222)
                 : const Color.fromARGB(1000, 154, 0, 2);
-            final textColor = darkMode 
+            final textColor = darkMode
                 ? const Color.fromARGB(1000, 154, 0, 2)
                 : const Color.fromARGB(1000, 239, 230, 222);
 
@@ -52,6 +78,14 @@ class _StatsPageState extends State<StatsPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  Text(
+                    "Level: ${widget.selectedLevel.toUpperCase()} (Max: ${statsRange.last})",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: textColor,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Expanded(
                     child: _buildStatPickerColumn(
                       title: statName.toUpperCase(),
@@ -65,7 +99,7 @@ class _StatsPageState extends State<StatsPage> {
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: darkMode 
+                      backgroundColor: darkMode
                           ? const Color.fromARGB(1000, 154, 0, 2)
                           : const Color.fromARGB(1000, 239, 230, 222),
                     ),
@@ -94,7 +128,7 @@ class _StatsPageState extends State<StatsPage> {
     required Function(int) onChange,
     required bool darkMode,
   }) {
-    final highlightColor = darkMode 
+    final highlightColor = darkMode
         ? const Color.fromARGB(1000, 154, 0, 2)
         : const Color.fromARGB(1000, 239, 230, 222);
 
@@ -137,9 +171,14 @@ class _StatsPageState extends State<StatsPage> {
                   child: Center(
                     child: Container(
                       height: 40,
+                      width: 100,
                       decoration: BoxDecoration(
-                        border: Border.all(color: highlightColor, width: 2),
-                        borderRadius: BorderRadius.circular(8),
+                        border: Border.symmetric(
+                          horizontal: BorderSide(
+                            color: highlightColor,
+                            width: 3,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -152,23 +191,22 @@ class _StatsPageState extends State<StatsPage> {
     );
   }
 
-  Widget _buildStatBox(String label, int value, bool darkMode, Function() onTap) {
-    final borderColor = darkMode 
-        ? const Color.fromARGB(1000, 239, 230, 222)
-        : const Color.fromARGB(1000, 154, 0, 2);
-    final textColor = darkMode 
+  Widget _buildStatBox(
+    String label,
+    int value,
+    bool darkMode,
+    Function() onTap,
+  ) {
+    final textColor = darkMode
         ? const Color.fromARGB(1000, 239, 230, 222)
         : const Color.fromARGB(1000, 154, 0, 2);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100,
+        width: 75,
+        height: 73,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: borderColor),
-          borderRadius: BorderRadius.circular(8),
-        ),
         child: Column(
           children: [
             Text(
@@ -176,7 +214,7 @@ class _StatsPageState extends State<StatsPage> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: textColor.withOpacity(0.7),
+                color: textColor,
               ),
             ),
             const SizedBox(height: 4),
@@ -197,7 +235,7 @@ class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: isDarkMode ,
+      valueListenable: isDarkMode,
       builder: (context, dark, _) {
         return Scaffold(
           backgroundColor: dark ? const Color(0xFF121212) : Colors.white,
@@ -221,7 +259,7 @@ class _StatsPageState extends State<StatsPage> {
                   },
                 ),
                 const SizedBox(height: 40),
-                
+
                 // Attacking and Defensive Stats side by side
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -233,29 +271,83 @@ class _StatsPageState extends State<StatsPage> {
                         builder: (context, darkMode, child) {
                           return Column(
                             children: [
+                              SizedBox(
+                                height: 30,
+                                width: 140,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: darkMode
+                                          ? const Color.fromARGB(
+                                              1000,
+                                              239,
+                                              230,
+                                              222,
+                                            )
+                                          : const Color.fromARGB(
+                                              1000,
+                                              154,
+                                              0,
+                                              2,
+                                            ),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      widget.selectedRole.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: darkMode
+                                            ? const Color.fromARGB(
+                                                1000,
+                                                239,
+                                                230,
+                                                222,
+                                              )
+                                            : const Color.fromARGB(
+                                                1000,
+                                                154,
+                                                0,
+                                                2,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 30),
                               Text(
                                 "Attacking Stats",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: darkMode
-                                      ? const Color.fromARGB(1000, 239, 230, 222)
+                                      ? const Color.fromARGB(
+                                          1000,
+                                          239,
+                                          230,
+                                          222,
+                                        )
                                       : const Color.fromARGB(1000, 154, 0, 2),
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 35),
                               _buildStatBox("PACE", pace, darkMode, () {
                                 _showStatPicker("Pace", pace, (newValue) {
                                   setState(() => pace = newValue);
                                 });
                               }),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 35),
                               _buildStatBox("SHOOTING", shooting, darkMode, () {
-                                _showStatPicker("Shooting", shooting, (newValue) {
+                                _showStatPicker("Shooting", shooting, (
+                                  newValue,
+                                ) {
                                   setState(() => shooting = newValue);
                                 });
                               }),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 35),
                               _buildStatBox("PASSING", passing, darkMode, () {
                                 _showStatPicker("Passing", passing, (newValue) {
                                   setState(() => passing = newValue);
@@ -266,9 +358,9 @@ class _StatsPageState extends State<StatsPage> {
                         },
                       ),
                     ),
-        
+
                     const SizedBox(width: 20),
-        
+
                     // Defensive Stats Column
                     Expanded(
                       child: ValueListenableBuilder<bool>(
@@ -276,31 +368,100 @@ class _StatsPageState extends State<StatsPage> {
                         builder: (context, darkMode, child) {
                           return Column(
                             children: [
+                              SizedBox(
+                                height: 30,
+                                width: 140,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: darkMode
+                                          ? const Color.fromARGB(
+                                              1000,
+                                              239,
+                                              230,
+                                              222,
+                                            )
+                                          : const Color.fromARGB(
+                                              1000,
+                                              154,
+                                              0,
+                                              2,
+                                            ),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      widget.selectedLevel.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: darkMode
+                                            ? const Color.fromARGB(
+                                                1000,
+                                                239,
+                                                230,
+                                                222,
+                                              )
+                                            : const Color.fromARGB(
+                                                1000,
+                                                154,
+                                                0,
+                                                2,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+
                               Text(
                                 "Defensive Stats",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: darkMode
-                                      ? const Color.fromARGB(1000, 239, 230, 222)
+                                      ? const Color.fromARGB(
+                                          1000,
+                                          239,
+                                          230,
+                                          222,
+                                        )
                                       : const Color.fromARGB(1000, 154, 0, 2),
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              _buildStatBox("DRIBBLING", dribbling, darkMode, () {
-                                _showStatPicker("Dribbling", dribbling, (newValue) {
-                                  setState(() => dribbling = newValue);
-                                });
-                              }),
-                              const SizedBox(height: 16),
-                              _buildStatBox("DEFENDING", defending, darkMode, () {
-                                _showStatPicker("Defending", defending, (newValue) {
-                                  setState(() => defending = newValue);
-                                });
-                              }),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 35),
+                              _buildStatBox(
+                                "DRIBBLING",
+                                dribbling,
+                                darkMode,
+                                () {
+                                  _showStatPicker("Dribbling", dribbling, (
+                                    newValue,
+                                  ) {
+                                    setState(() => dribbling = newValue);
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 35),
+                              _buildStatBox(
+                                "DEFENDING",
+                                defending,
+                                darkMode,
+                                () {
+                                  _showStatPicker("Defending", defending, (
+                                    newValue,
+                                  ) {
+                                    setState(() => defending = newValue);
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 35),
                               _buildStatBox("PHYSICAL", physical, darkMode, () {
-                                _showStatPicker("Physical", physical, (newValue) {
+                                _showStatPicker("Physical", physical, (
+                                  newValue,
+                                ) {
                                   setState(() => physical = newValue);
                                 });
                               }),
@@ -311,9 +472,38 @@ class _StatsPageState extends State<StatsPage> {
                     ),
                   ],
                 ),
-        
+                ValueListenableBuilder(
+                  valueListenable: isDarkMode,
+                  builder: (context, darkMode, child) {
+                    return SizedBox(
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        margin: const EdgeInsets.all(50),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: darkMode
+                                ? const Color.fromARGB(1000, 239, 230, 222)
+                                : const Color.fromARGB(1000, 154, 0, 2),
+                          ),
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: Text(
+                          "THIS FOR TRAITS",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: darkMode
+                                ? const Color.fromARGB(1000, 239, 230, 222)
+                                : const Color.fromARGB(1000, 154, 0, 2),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
                 const Spacer(),
-        
+
                 SizedBox(
                   width: double.infinity,
                   child: ValueListenableBuilder<bool>(
@@ -342,8 +532,11 @@ class _StatsPageState extends State<StatsPage> {
                           ),
                         ),
                         child: const Text(
-                          'Save Profile',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          'Save Stats',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       );
                     },
@@ -353,7 +546,7 @@ class _StatsPageState extends State<StatsPage> {
             ),
           ),
         );
-      }
+      },
     );
   }
 }

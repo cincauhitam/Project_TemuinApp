@@ -21,9 +21,6 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
     'beginner',
     'amateur',
     'semi pro',
-    'pro',
-    'world class',
-    'legend',
   ];
 
   // Birth date variables
@@ -350,44 +347,6 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
       valueListenable: isDarkMode,
       builder: (context, darkMode, child) {
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: ValueListenableBuilder<bool>(
-                  valueListenable: isDarkMode,
-                  builder: (context, darkMode, child) {
-                    return Icon(
-                      Icons.settings,
-                      color: darkMode
-                          ? const Color.fromARGB(1000, 239, 230, 222)
-                          : const Color.fromARGB(1000, 154, 0, 2),
-                    );
-                  },
-                ),
-                onPressed: () {
-                  // Settings logic
-                },
-              ),
-              ValueListenableBuilder<bool>(
-                valueListenable: isDarkMode,
-                builder: (context, darkMode, child) {
-                  return IconButton(
-                    icon: Icon(
-                      darkMode ? Icons.light_mode : Icons.dark_mode,
-                      color: darkMode
-                          ? const Color.fromARGB(1000, 239, 230, 222)
-                          : const Color.fromARGB(1000, 154, 0, 2),
-                    ),
-                    onPressed: () {
-                      isDarkMode.value = !isDarkMode.value;
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
           backgroundColor: darkMode
               ? const Color.fromARGB(255, 0, 0, 0)
               : const Color.fromARGB(255, 255, 255, 255),
@@ -611,32 +570,24 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                     },
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 40),
 
                   // Role and Level Row
                   Row(
                     children: [
                       // Role Dropdown
                       Expanded(
-                        child: ValueListenableBuilder<bool>(
-                          valueListenable: isDarkMode,
-                          builder: (context, darkMode, child) {
-                            return InputDecorator(
-                              decoration: InputDecoration(
-                                labelText: 'Role',
-                                labelStyle: TextStyle(
-                                  color: darkMode
-                                      ? const Color.fromARGB(
-                                          1000,
-                                          239,
-                                          230,
-                                          222,
-                                        )
-                                      : const Color.fromARGB(1000, 154, 0, 2),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
+                        
+                        child: SizedBox(
+                          height: 65,
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable: isDarkMode,
+                            builder: (context, darkMode, child) {
+                              return InputDecorator(
+                                
+                                decoration: InputDecoration(
+                                  labelText: 'Role',
+                                  labelStyle: TextStyle(
                                     color: darkMode
                                         ? const Color.fromARGB(
                                             1000,
@@ -646,139 +597,29 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                                           )
                                         : const Color.fromARGB(1000, 154, 0, 2),
                                   ),
-                                ),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: ValueListenableBuilder(
-                                  valueListenable: isDarkMode,
-                                  builder: (context, value, child) {
-                                    return DropdownButton<String>(
-                                      value: _selectedRole,
-                                      isExpanded: true,
-                                      icon: Icon(
-                                        Icons.arrow_drop_down,
-                                        color: darkMode
-                                            ? const Color.fromARGB(
-                                                1000,
-                                                239,
-                                                230,
-                                                222,
-                                              )
-                                            : const Color.fromARGB(
-                                                1000,
-                                                154,
-                                                0,
-                                                2,
-                                              ),
-                                      ),
-                                      dropdownColor: darkMode
-                                          ? const Color.fromARGB(255, 0, 0, 0)
-                                          : const Color.fromARGB(
-                                              255,
-                                              255,
-                                              255,
-                                              255,
-                                            ),
-                                      items: _roles.map((String role) {
-                                        return DropdownMenuItem<String>(
-                                          value: role,
-                                          child: Text(
-                                            role,
-                                            style: TextStyle(
-                                              color: darkMode
-                                                  ? const Color.fromARGB(
-                                                      1000,
-                                                      239,
-                                                      230,
-                                                      222,
-                                                    )
-                                                  : const Color.fromARGB(
-                                                      255,
-                                                      0,
-                                                      0,
-                                                      0,
-                                                    ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          _selectedRole = newValue;
-                                        });
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // Level Dropdown
-                      Expanded(
-                        child: ValueListenableBuilder<bool>(
-                          valueListenable: isDarkMode,
-                          builder: (context, darkMode, child) {
-                            return InputDecorator(
-                              decoration: InputDecoration(
-                                labelText: 'Level',
-                                labelStyle: TextStyle(
-                                  color: darkMode
-                                      ? const Color.fromARGB(
-                                          1000,
-                                          239,
-                                          230,
-                                          222,
-                                        )
-                                      : const Color.fromARGB(1000, 154, 0, 2),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: darkMode
-                                        ? const Color.fromARGB(
-                                            1000,
-                                            239,
-                                            230,
-                                            222,
-                                          )
-                                        : const Color.fromARGB(1000, 154, 0, 2),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: darkMode
+                                          ? const Color.fromARGB(
+                                              1000,
+                                              239,
+                                              230,
+                                              222,
+                                            )
+                                          : const Color.fromARGB(1000, 154, 0, 2),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _selectedLevel,
-                                  isExpanded: true,
-                                  icon: Icon(
-                                    Icons.arrow_drop_down,
-                                    color: darkMode
-                                        ? const Color.fromARGB(
-                                            1000,
-                                            239,
-                                            230,
-                                            222,
-                                          )
-                                        : const Color.fromARGB(1000, 154, 0, 2),
-                                  ),
-                                  dropdownColor: darkMode
-                                      ? const Color.fromARGB(255, 0, 0, 0)
-                                      : const Color.fromARGB(
-                                          255,
-                                          255,
-                                          255,
-                                          255,
-                                        ),
-                                  items: _levels.map((String level) {
-                                    return DropdownMenuItem<String>(
-                                      value: level,
-                                      child: Text(
-                                        level,
-                                        style: TextStyle(
+                                child: DropdownButtonHideUnderline(
+                                  child: ValueListenableBuilder(
+                                    valueListenable: isDarkMode,
+                                    builder: (context, value, child) {
+                                      return DropdownButton<String>(
+                                        value: _selectedRole,
+                                        isExpanded: true,
+                                        icon: Icon(
+                                          Icons.arrow_drop_down,
                                           color: darkMode
                                               ? const Color.fromARGB(
                                                   1000,
@@ -786,20 +627,146 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                                                   230,
                                                   222,
                                                 )
-                                              : Colors.black,
+                                              : const Color.fromARGB(
+                                                  1000,
+                                                  154,
+                                                  0,
+                                                  2,
+                                                ),
                                         ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      _selectedLevel = newValue;
-                                    });
-                                  },
+                                        dropdownColor: darkMode
+                                            ? const Color.fromARGB(255, 0, 0, 0)
+                                            : const Color.fromARGB(
+                                                255,
+                                                255,
+                                                255,
+                                                255,
+                                              ),
+                                        items: _roles.map((String role) {
+                                          return DropdownMenuItem<String>(
+                                            value: role,
+                                            child: Text(
+                                              role,
+                                              style: TextStyle(
+                                                color: darkMode
+                                                    ? const Color.fromARGB(
+                                                        1000,
+                                                        239,
+                                                        230,
+                                                        222,
+                                                      )
+                                                    : const Color.fromARGB(
+                                                        255,
+                                                        0,
+                                                        0,
+                                                        0,
+                                                      ),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            _selectedRole = newValue;
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 30),
+
+                      // Level Dropdown
+                      Expanded(
+                        child: SizedBox(
+                          height: 65,
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable: isDarkMode,
+                            builder: (context, darkMode, child) {
+                              return InputDecorator(
+                                decoration: InputDecoration(
+                                  labelText: 'Level',
+                                  labelStyle: TextStyle(
+                                    color: darkMode
+                                        ? const Color.fromARGB(
+                                            1000,
+                                            239,
+                                            230,
+                                            222,
+                                          )
+                                        : const Color.fromARGB(1000, 154, 0, 2),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: darkMode
+                                          ? const Color.fromARGB(
+                                              1000,
+                                              239,
+                                              230,
+                                              222,
+                                            )
+                                          : const Color.fromARGB(1000, 154, 0, 2),
+                                    ),
+                                  ),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    value: _selectedLevel,
+                                    isExpanded: true,
+                                    icon: Icon(
+                                      Icons.arrow_drop_down,
+                                      color: darkMode
+                                          ? const Color.fromARGB(
+                                              1000,
+                                              239,
+                                              230,
+                                              222,
+                                            )
+                                          : const Color.fromARGB(1000, 154, 0, 2),
+                                    ),
+                                    dropdownColor: darkMode
+                                        ? const Color.fromARGB(255, 0, 0, 0)
+                                        : const Color.fromARGB(
+                                            255,
+                                            255,
+                                            255,
+                                            255,
+                                          ),
+                                    items: _levels.map((String level) {
+                                      return DropdownMenuItem<String>(
+                                        value: level,
+                                        child: Text(
+                                          level,
+                                          style: TextStyle(
+                                            color: darkMode
+                                                ? const Color.fromARGB(
+                                                    1000,
+                                                    239,
+                                                    230,
+                                                    222,
+                                                  )
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedLevel = newValue;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -810,16 +777,23 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
 
                   // Save Button
                   SizedBox(
-                    width: double.infinity,
+                    width: 180,
+                    height: 55,
                     child: ValueListenableBuilder<bool>(
                       valueListenable: isDarkMode,
                       builder: (context, darkMode, child) {
                         return ElevatedButton(
                           onPressed: () {
                             // Save profile logic Here
-                            Navigator.pushReplacement(context, MaterialPageRoute(
-                              builder: (context) => const StatsPage(),
-                            ));
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StatsPage(
+                                  selectedLevel: _selectedLevel ?? 'beginner',
+                                  selectedRole: _selectedRole ?? 'pivot',
+                                ),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: darkMode
@@ -836,14 +810,14 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                           child: const Text(
                             'Save Profile',
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         );
                       },
                     ),
-                  ),
+                  ),SizedBox(height: 10,)
                 ],
               ),
             ),
