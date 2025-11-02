@@ -8,8 +8,23 @@ import 'package:project_flutter/views/pages/register%20flow/set_up_traits.dart';
 import 'package:project_flutter/views/pages/register%20flow/stats_page.dart';
 import 'package:project_flutter/views/pages/register_page.dart';
 import 'package:project_flutter/views/widget_tree.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    // Initialize Supabase
+    await Supabase.initialize(
+      url: 'https://ynrlazotnpftjyziovky.supabase.co',
+      anonKey: 'sb_publishable_m4emukdfkUxoFHBhi36yPg__1DYqmWb',
+    );
+    print('✅ Supabase initialized successfully');
+  } catch (e) {
+    print('❌ Error initializing Supabase: $e');
+    // Continue anyway - will show error when trying to use it
+  }
+
   runApp(const MyApp());
 }
 

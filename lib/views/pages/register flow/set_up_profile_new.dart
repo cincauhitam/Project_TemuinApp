@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -202,9 +203,7 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
         throw Exception('Username cannot be empty');
       }
 
-      final isUsernameAvailable = await _authService.isUsernameAvailable(
-        username,
-      );
+      final isUsernameAvailable = await _authService.isUsernameAvailable(username);
 
       if (!isUsernameAvailable) {
         _showError(
@@ -229,20 +228,17 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
         throw Exception('Please enter a valid birth date');
       }
 
-      // Additional fields in your profile data - ADD HEIGHT HERE
+      // Profile data matching database schema
       final profileData = {
         'username': username,
         'full_name': _fullNameController.text.trim(),
         'age': age,
-        'height': selectedHeight, // THIS IS THE KEY FIX
+        'height': selectedHeight,
         'role': _selectedRole!,
         'level': _selectedLevel!,
         'date_of_birth':
             '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}-${selectedDay.toString().padLeft(2, '0')}',
-        'timezone': DateTime.now().timeZoneName,
-        'birth_year': selectedYear,
-        'birth_month': selectedMonth,
-        'birth_day': selectedDay,
+        'profile_created': true, // Mark profile as created
       };
 
       final validationErrors = _authService.validateProfileData(profileData);
@@ -251,11 +247,30 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
         throw Exception(errorMessage);
       }
 
-      // Uncomment your API call when ready
-      final result = await _authService.createUserProfile(profileData);
+      // Convert profile picture to base64 if selected
+      String? profilePictureBase64;
+      String? profilePictureFilename;
 
-      if (result['error'] != null) {
-        final error = result['error'].toString();
+      if (_selectedImage != null) {
+        try {
+          final bytes = await File(_selectedImage!.path).readAsBytes();
+          profilePictureBase64 = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+          profilePictureFilename = _selectedImage!.name;
+        } catch (e) {
+          print('Failed to convert profile picture: $e');
+          // Continue without profile picture
+        }
+      }
+
+      // Call API to create profile
+      final result = await _authService.createUserProfile(
+        profileData,
+        profilePictureBase64: profilePictureBase64,
+        profilePictureFilename: profilePictureFilename,
+      );
+
+      if (result['success'] != true) {
+        final error = result['error']?.toString() ?? 'Failed to create profile';
 
         if (error.contains('duplicate key value violates unique constraint')) {
           throw Exception(
@@ -627,8 +642,10 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                   // Error message
                   if (_errorMessage != null)
                     Container(
@@ -1184,7 +1201,7 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                     ],
                   ),
 
-                  const Spacer(),
+                  const SizedBox(height: 32),
 
                   // Save Button
                   SizedBox(
@@ -1224,6 +1241,7 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                           ),
                   ),
                 ],
+              ),
               ),
             ),
           ),

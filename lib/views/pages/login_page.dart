@@ -148,20 +148,38 @@ class _LoginPageState extends State<LoginPage> {
                             final password = passwordController.text;
                   
                             try {
-                              final result =
-                                  await AuthService().login(email, password);
+                              final authService = AuthService();
+                              final result = await authService.login(email, password);
                               print("User logged in: $result");
                   
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => WidgetTree(),
-                                ),
-                              );
+                              // Check if profile is created
+                              final isProfileCreated = await authService.isProfileCreated();
+
+                              if (mounted) {
+                                if (isProfileCreated) {
+                                  // Profile exists, go to main app
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const WidgetTree(),
+                                    ),
+                                  );
+                                } else {
+                                  // Profile not created, go to profile setup
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const SetUpProfileNew(),
+                                    ),
+                                  );
+                                }
+                              }
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(e.toString())),
-                              );
+                              if (mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(e.toString())),
+                                );
+                              }
                             }
                           },
                           child: const Text(
@@ -187,21 +205,40 @@ class _LoginPageState extends State<LoginPage> {
                                 if (result.user != null) {
                                   print(
                                       "User logged in with Google: ${result.user!.email}");
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SetUpProfileNew(),
+
+                                  // Check if profile is created
+                                  final isProfileCreated = await authService.isProfileCreated();
+
+                                  if (mounted) {
+                                    if (isProfileCreated) {
+                                      // Profile exists, go to main app
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const WidgetTree(),
+                                        ),
+                                      );
+                                    } else {
+                                      // Profile not created, go to profile setup
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const SetUpProfileNew(),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                              } catch (e) {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Google sign-in failed: ${e.toString()}'),
+                                      backgroundColor: Colors.red,
                                     ),
                                   );
                                 }
-                              } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Google sign-in failed: ${e.toString()}'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
                               }
                             },
                             style: ElevatedButton.styleFrom(

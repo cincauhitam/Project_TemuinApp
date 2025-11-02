@@ -25,8 +25,158 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Use the same AuthService instance
   final AuthService _authService = AuthService();
-  
-  get loginResponse => null;
+
+  // Show email verification dialog
+  void _showEmailVerificationDialog(BuildContext context, String email, String password) {
+    // Capture the page context explicitly
+    final pageContext = context;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        bool isVerifying = false;
+
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Row(
+                children: [
+                  Icon(Icons.email_outlined, color: Colors.blue, size: 28),
+                  SizedBox(width: 12),
+                  Text('Verify Your Email'),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'We\'ve sent a verification email to:',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    email,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Please check your email and click the verification link to activate your account.',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'After verifying, click "Continue" below.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: isVerifying ? null : () {
+                    if (Navigator.of(dialogContext).canPop()) {
+                      Navigator.of(dialogContext).pop();
+                    }
+                    if (pageContext.mounted) {
+                      Navigator.pushReplacement(
+                        pageContext,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginPage(),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Back to Login'),
+                ),
+                ElevatedButton(
+                  onPressed: isVerifying ? null : () async {
+                    setDialogState(() => isVerifying = true);
+
+                    try {
+                      log("Attempting to login after email verification...");
+                      final loginResponse = await _authService.login(email, password);
+                      log("Login successful: $loginResponse");
+
+                      // Close the dialog FIRST before navigating
+                      if (Navigator.of(dialogContext).canPop()) {
+                        Navigator.of(dialogContext).pop();
+                      }
+
+                      // Small delay to ensure dialog is fully closed
+                      await Future.delayed(const Duration(milliseconds: 200));
+
+                      // Use pageContext for navigation to ensure proper context
+                      if (pageContext.mounted) {
+                        ScaffoldMessenger.of(pageContext).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Email verified! Setting up your profile...",
+                            ),
+                            backgroundColor: Colors.green,
+                            duration: Duration(milliseconds: 800),
+                          ),
+                        );
+
+                        await Future.delayed(const Duration(milliseconds: 800));
+
+                        if (pageContext.mounted) {
+                          log("Navigating to SetUpProfileNew...");
+                          Navigator.pushReplacement(
+                            pageContext,
+                            MaterialPageRoute(
+                              builder: (context) => const SetUpProfileNew(),
+                            ),
+                          );
+                        }
+                      }
+                    } catch (e) {
+                      log("Login failed: $e");
+
+                      // Only update state if dialog is still mounted
+                      if (Navigator.of(dialogContext).canPop()) {
+                        setDialogState(() => isVerifying = false);
+                      }
+
+                      if (pageContext.mounted) {
+                        ScaffoldMessenger.of(pageContext).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              e.toString().contains('Email not confirmed')
+                                  ? 'Please verify your email first'
+                                  : 'Login failed: $e',
+                            ),
+                            backgroundColor: Colors.orange,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: isVerifying
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text('Continue'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -259,55 +409,49 @@ class _RegisterPageState extends State<RegisterPage> {
                               setState(() => isLoading = true);
 
                               try {
-                                // ✅ Step 1: Register new user using the same AuthService instance
+                                // ✅ Step 1: Register new user
+                                log("Starting registration for email: $email");
                                 final registerResponse = await _authService
                                     .register(email, password);
-                                if (registerResponse.user != null) {
-                                  final loginResponse = await _authService
-                                      .login(email, password);
-                                  // Now isSignedIn() should return true
-                                }
-                                //final registerResult = await _authService.register(
-                                //   email,
-                                //   password,
-                                // );
-                                log("User registered: $registerResponse");
+                                log("User registered successfully: $registerResponse");
 
-                                // ✅ Step 2: Automatically log in user using the same AuthService instance
-                                // final loginResult = await _authService.login(
-                                //   email,
-                                //   password,
-                                // );
-                                log(
-                                  "User logged in automatically: $loginResponse",
-                                );
+                                // Check if email confirmation is required
+                                final confirmationRequired = registerResponse['confirmation_required'] == true;
 
-                                // ✅ Step 3: Check if user is authenticated
-                                if (_authService.isSignedIn()) {
-                                  log(
-                                    "User is authenticated, navigating to profile setup",
-                                  );
+                                if (confirmationRequired) {
+                                  // Email verification required
+                                  log("Email verification required");
+                                  setState(() => isLoading = false);
 
-                                  // ✅ Step 4: Navigate to main app
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SetUpProfileNew(),
-                                    ),
-                                  );
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Registration successful! Logged in automatically.",
-                                      ),
-                                    ),
-                                  );
+                                  if (mounted) {
+                                    _showEmailVerificationDialog(context, email, password);
+                                  }
                                 } else {
-                                  throw Exception(
-                                    "User authentication failed after login",
-                                  );
+                                  // No email verification required, proceed directly
+                                  log("No email verification required, proceeding to profile setup");
+
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Registration successful! Setting up your profile...",
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+
+                                    await Future.delayed(const Duration(milliseconds: 500));
+
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SetUpProfileNew(),
+                                      ),
+                                    );
+                                  }
+
+                                  setState(() => isLoading = false);
                                 }
                               } catch (e, stack) {
                                 log(
@@ -315,12 +459,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                   error: e,
                                   stackTrace: stack,
                                 );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("Registration failed: $e"),
-                                  ),
-                                );
-                              } finally {
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Registration failed: $e"),
+                                    ),
+                                  );
+                                }
                                 setState(() => isLoading = false);
                               }
                             },
