@@ -47,7 +47,7 @@ class _SetUpTraitsState extends State<SetUpTraits> {
           final textColor = dark ? const Color(0xFFEFE6DE) : Colors.black;
           final selectedBg = dark
               ? const Color(0xFF9A0002)
-              : const Color(0xFF9A0002).withOpacity(0.1);
+              : const Color(0xFF9A0002).withValues(alpha: 0.1);
 
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),

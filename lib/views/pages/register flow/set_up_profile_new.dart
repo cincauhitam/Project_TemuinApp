@@ -561,7 +561,7 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: textColor.withOpacity(0.7),
+                color: textColor.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 4),
@@ -603,7 +603,7 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: textColor.withOpacity(0.7),
+                color: textColor.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: 4),
@@ -653,7 +653,7 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.only(bottom: 16),
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
+                        color: Colors.red.withValues(alpha: 0.1),
                         border: Border.all(color: Colors.red),
                         borderRadius: BorderRadius.circular(8),
                       ),

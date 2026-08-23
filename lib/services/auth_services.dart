@@ -12,7 +12,7 @@ class AuthService {
   // Google OAuth configuration
   final String googleWebClientId = "543691766095-macsqg4ftq74ktrb4lk9hospsjsmbbas.apps.googleusercontent.com";
   final String androidClientId = "543691766095-7f24hkktrq14uc76hg5u0tq0eikog2ul.apps.googleusercontent.com";
-  late GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  late final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   final scopes= ['email', 'profile'];
 
   // Use the initialized Supabase singleton instance
@@ -102,18 +102,14 @@ class AuthService {
   Future<AuthResponse> signInWithGoogle() async {
     try {
       // Trigger the Google Sign-In flow
-      final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
-
-      if (googleUser == null) {
-        throw Exception('Google sign-in was cancelled by user');
-      }
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
       /// Authorization is required to obtain the access token with the appropriate scopes for Supabase authentication,
       /// while also granting permission to access user information.
       final authorization = await googleUser.authorizationClient.authorizationForScopes(scopes) ?? await googleUser.authorizationClient.authorizeScopes(scopes);
 
       // Obtain the auth details from the request
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       if (googleAuth.idToken == null) {
         throw Exception('Failed to get Google ID token');

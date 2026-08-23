@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/data/notifiers.dart';
 import 'package:project_flutter/views/pages/login_page.dart';
+import 'package:project_flutter/views/pages/login_page_new.dart';
 import 'package:project_flutter/views/pages/setting_page.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -125,7 +126,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
+                          builder: (context) => const Login(),
                         ),
                       );
                     },

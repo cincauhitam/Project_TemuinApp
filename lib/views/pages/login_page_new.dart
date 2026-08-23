@@ -1,19 +1,21 @@
+// TODO Implement this library.import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_flutter/services/auth_services.dart';
 import 'package:project_flutter/views/pages/forgot_password.dart';
 import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
 import 'package:project_flutter/views/pages/register_page.dart';
+import 'package:project_flutter/views/pages/application_info.dart';
 import 'package:project_flutter/views/widget_tree.dart';
 
-class Study extends StatefulWidget {
-  const Study({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<Study> createState() => _StudyState();
+  State<Login> createState() => _LoginState();
 }
 
-class _StudyState extends State<Study> {
+class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -116,6 +118,13 @@ class _StudyState extends State<Study> {
     );
   }
 
+  void _handleApplicationInfo() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const ApplicationInfo()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     const maroon = Color.fromARGB(1000, 154, 0, 2);
@@ -125,32 +134,50 @@ class _StudyState extends State<Study> {
     return Scaffold(
       backgroundColor: maroon,
       body: SafeArea(
-        child: Column(
+          child: Stack(
           children: [
+            Positioned(
+              top: 4,
+              right: 12,
+              child: Text(
+                '*dummy version (Under Development)',
+                style: GoogleFonts.poppins(
+                  fontSize: 15,
+                  color: const Color.fromARGB(232, 255, 255, 255).withValues(alpha: 0.5),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+            Column(
+              children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 10, 0, 0),
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) {
-                      return Container(
-                        width: 5,
-                        height: 5,
-                        margin: EdgeInsets.only(left: index == 0 ? 0 : 2, right: index == 2 ? 0 : 2),
-                        decoration: const BoxDecoration(
-                          color: maroon,
-                          shape: BoxShape.circle,
-                        ),
-                      );
-                    }),
+                //Three Dots Option
+                child: GestureDetector(
+                  onTap: _handleApplicationInfo,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(0, 255, 255, 255),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(3, (index) {
+                        return Container(
+                          width: 5,
+                          height: 5,
+                          margin: EdgeInsets.only(left: index == 0 ? 0 : 2, right: index == 2 ? 0 : 2),
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(232, 239, 230, 222),
+                            shape: BoxShape.circle,
+                          ),
+                        );
+                      }),
+                    ),
                   ),
                 ),
               ),
@@ -173,7 +200,7 @@ class _StudyState extends State<Study> {
                       style: GoogleFonts.anton(
                         fontSize: 42,
                         letterSpacing: 1.2,
-                        color: cream,
+                        color: const Color.fromARGB(232, 239, 230, 222),
                         height: 1,
                       ),
                     ),
@@ -336,10 +363,15 @@ class _StudyState extends State<Study> {
                             ),
                           ),
                           const SizedBox(height: 18),
+                          //LOGIN BUTTON
                           SizedBox(
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: _isLoading ? null : _handleLogin,
+                              // onPressed: _isLoading ? null : _handleLogin,
+                              onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => const WidgetTree()),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: cream,
                                 disabledBackgroundColor: creamSoft,
@@ -407,7 +439,11 @@ class _StudyState extends State<Study> {
                     height: 40,
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _handleGoogleLogin,
+                      // onPressed: _handleGoogleLogin,
+                      onPressed: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const WidgetTree()),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: maroon,
                         foregroundColor: Colors.white,
@@ -462,6 +498,9 @@ class _StudyState extends State<Study> {
                 ],
               ),
             ),
+          ],
+        ),
+            
           ],
         ),
       ),
