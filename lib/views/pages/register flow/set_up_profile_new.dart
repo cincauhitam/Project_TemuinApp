@@ -198,22 +198,22 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
     });
 
     try {
-      final username = _usernameController.text.trim();
-      if (username.isEmpty) {
-        throw Exception('Username cannot be empty');
-      }
+      // final username = _usernameController.text.trim();
+      // if (username.isEmpty) {
+      //   throw Exception('Username cannot be empty');
+      // }
 
-      final isUsernameAvailable = await _authService.isUsernameAvailable(username);
+      // final isUsernameAvailable = await _authService.isUsernameAvailable(username);
 
-      if (!isUsernameAvailable) {
-        _showError(
-          'Username "$username" is already taken. Please choose another one.',
-        );
-        setState(() {
-          _isLoading = false;
-        });
-        return;
-      }
+      // if (!isUsernameAvailable) {
+      //   _showError(
+      //     'Username "$username" is already taken. Please choose another one.',
+      //   );
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   return;
+      // }
 
       // Fix the height validation to match your actual range (140-250)
       if (selectedHeight < 140 || selectedHeight > 250) {
@@ -229,65 +229,65 @@ class _SetUpProfileNewState extends State<SetUpProfileNew> {
       }
 
       // Profile data matching database schema
-      final profileData = {
-        'username': username,
-        'full_name': _fullNameController.text.trim(),
-        'age': age,
-        'height': selectedHeight,
-        'role': _selectedRole!,
-        'level': _selectedLevel!,
-        'date_of_birth':
-            '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}-${selectedDay.toString().padLeft(2, '0')}',
-        'profile_created': true, // Mark profile as created
-      };
+      // final profileData = {
+      //   'username': username,
+      //   'full_name': _fullNameController.text.trim(),
+      //   'age': age,
+      //   'height': selectedHeight,
+      //   'role': _selectedRole!,
+      //   'level': _selectedLevel!,
+      //   'date_of_birth':
+      //       '$selectedYear-${selectedMonth.toString().padLeft(2, '0')}-${selectedDay.toString().padLeft(2, '0')}',
+      //   'profile_created': true, // Mark profile as created
+      // };
 
-      final validationErrors = _authService.validateProfileData(profileData);
-      if (validationErrors != null) {
-        final errorMessage = validationErrors.values.join('\n');
-        throw Exception(errorMessage);
-      }
+      // final validationErrors = _authService.validateProfileData(profileData);
+      // if (validationErrors != null) {
+      //   final errorMessage = validationErrors.values.join('\n');
+      //   throw Exception(errorMessage);
+      // }
 
       // Convert profile picture to base64 if selected
-      String? profilePictureBase64;
-      String? profilePictureFilename;
+      // String? profilePictureBase64;
+      // String? profilePictureFilename;
 
-      if (_selectedImage != null) {
-        try {
-          final bytes = await File(_selectedImage!.path).readAsBytes();
-          profilePictureBase64 = 'data:image/jpeg;base64,${base64Encode(bytes)}';
-          profilePictureFilename = _selectedImage!.name;
-        } catch (e) {
-          print('Failed to convert profile picture: $e');
-          // Continue without profile picture
-        }
-      }
+      // if (_selectedImage != null) {
+      //   try {
+      //     final bytes = await File(_selectedImage!.path).readAsBytes();
+      //     profilePictureBase64 = 'data:image/jpeg;base64,${base64Encode(bytes)}';
+      //     profilePictureFilename = _selectedImage!.name;
+      //   } catch (e) {
+      //     print('Failed to convert profile picture: $e');
+      //     // Continue without profile picture
+      //   }
+      // }
 
       // Call API to create profile
-      final result = await _authService.createUserProfile(
-        profileData,
-        profilePictureBase64: profilePictureBase64,
-        profilePictureFilename: profilePictureFilename,
-      );
+      // final result = await _authService.createUserProfile(
+      //   profileData,
+      //   profilePictureBase64: profilePictureBase64,
+      //   profilePictureFilename: profilePictureFilename,
+      // );
 
-      if (result['success'] != true) {
-        final error = result['error']?.toString() ?? 'Failed to create profile';
+      // if (result['success'] != true) {
+      //   final error = result['error']?.toString() ?? 'Failed to create profile';
 
-        if (error.contains('duplicate key value violates unique constraint')) {
-          throw Exception(
-            'Username is already taken. Please choose another one.',
-          );
-        } else if (error.contains('violates check constraint')) {
-          throw Exception(
-            'Invalid data provided. Please check your information.',
-          );
-        } else if (error.contains('network') || error.contains('timeout')) {
-          throw Exception(
-            'Network error. Please check your connection and try again.',
-          );
-        } else {
-          throw Exception('Failed to create profile: $error');
-        }
-      }
+      //   if (error.contains('duplicate key value violates unique constraint')) {
+      //     throw Exception(
+      //       'Username is already taken. Please choose another one.',
+      //     );
+      //   } else if (error.contains('violates check constraint')) {
+      //     throw Exception(
+      //       'Invalid data provided. Please check your information.',
+      //     );
+      //   } else if (error.contains('network') || error.contains('timeout')) {
+      //     throw Exception(
+      //       'Network error. Please check your connection and try again.',
+      //     );
+      //   } else {
+      //     throw Exception('Failed to create profile: $error');
+      //   }
+      // }
 
       _showSuccess('Profile created successfully! 🎉');
 

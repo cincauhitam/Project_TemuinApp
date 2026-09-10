@@ -1,9 +1,9 @@
-import 'dart:developer'; // Correct import for log function
+﻿import 'dart:developer'; // Correct import for log function
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_flutter/data/notifiers.dart';
-import 'package:project_flutter/services/auth_services.dart';
-import 'package:project_flutter/study.dart';
+// import 'package:project_flutter/services/auth_services.dart'; // Commented out for dummy version
+// Removed mock_auth_service per PRD v2.0
 import 'package:project_flutter/views/pages/login_page.dart';
 import 'package:project_flutter/views/pages/login_page_new.dart';
 import 'package:project_flutter/views/pages/register%20flow/set_up_profile_new.dart';
@@ -19,7 +19,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool receiveNews = false;
   bool privacyPolicy = false;
-  bool isLoading = false;
+  // bool isLoading = false;  // REMOVED: auth loading state not needed for dummy version
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController reenterEmailController = TextEditingController();
@@ -27,159 +27,17 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController reenterPasswordController =
       TextEditingController();
 
-  // Use the same AuthService instance
-  final AuthService _authService = AuthService();
+  // DEMO: Use mock auth service instead of real Supabase auth
+  // final AuthService _authService = AuthService();
 
-  // Show email verification dialog
-  void _showEmailVerificationDialog(BuildContext context, String email, String password) {
-    // Capture the page context explicitly
-    final pageContext = context;
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        bool isVerifying = false;
-
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return AlertDialog(
-              title: const Row(
-                children: [
-                  Icon(Icons.email_outlined, color: Colors.blue, size: 28),
-                  SizedBox(width: 12),
-                  Text('Verify Your Email'),
-                ],
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'We\'ve sent a verification email to:',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    email,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Please check your email and click the verification link to activate your account.',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'After verifying, click "Continue" below.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: isVerifying ? null : () {
-                    if (Navigator.of(dialogContext).canPop()) {
-                      Navigator.of(dialogContext).pop();
-                    }
-                    if (pageContext.mounted) {
-                      Navigator.pushReplacement(
-                        pageContext,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text('Back to Login'),
-                ),
-                ElevatedButton(
-                  onPressed: isVerifying ? null : () async {
-                    final dialogNavigator = Navigator.of(dialogContext);
-                    final pageMessenger = ScaffoldMessenger.maybeOf(pageContext);
-
-                    setDialogState(() => isVerifying = true);
-
-                    try {
-                      log("Attempting to login after email verification...");
-                      final loginResponse = await _authService.login(email, password);
-                      log("Login successful: $loginResponse");
-
-                      if (dialogNavigator.canPop()) {
-                        dialogNavigator.pop();
-                      }
-
-                      await Future.delayed(const Duration(milliseconds: 200));
-
-                      if (!pageContext.mounted) return;
-
-                      pageMessenger?.showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Email verified! Setting up your profile...",
-                          ),
-                          backgroundColor: Colors.green,
-                          duration: Duration(milliseconds: 800),
-                        ),
-                      );
-
-                      await Future.delayed(const Duration(milliseconds: 800));
-
-                      if (!pageContext.mounted) return;
-
-                      log("Navigating to SetUpProfileNew...");
-                      Navigator.pushReplacement(
-                        pageContext,
-                        MaterialPageRoute(
-                          builder: (context) => const SetUpProfileNew(),
-                        ),
-                      );
-                    } catch (e) {
-                      log("Login failed: $e");
-
-                      if (dialogNavigator.canPop()) {
-                        setDialogState(() => isVerifying = false);
-                      }
-
-                      if (!pageContext.mounted) return;
-
-                      pageMessenger?.showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            e.toString().contains('Email not confirmed')
-                                ? 'Please verify your email first'
-                                : 'Login failed: $e',
-                          ),
-                          backgroundColor: Colors.orange,
-                        ),
-                      );
-                    }
-                  },
-                  child: isVerifying
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text('Continue'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
+  // REMOVED FOR DUMMY VERSION — all authentication functions commented out per request
+  // void _showEmailVerificationDialog(BuildContext context, String email, String password) {
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (BuildContext dialogContext) { ... },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -444,130 +302,40 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           elevation: 0,
                         ),
-                        onPressed: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const WidgetTree(),
+                        onPressed: () async {
+                          final currentMessenger = ScaffoldMessenger.of(context);
+                          final currentNavigator = Navigator.of(context);
+
+                          // SIMULATED REGISTRATION — no actual auth (dummy version)
+                          await Future.delayed(const Duration(seconds: 1)); // Simulate delay
+
+                          if (!mounted) return;
+
+                          currentMessenger.showSnackBar(
+                            const SnackBar(
+                              content: Text("Registration successful! Setting up your profile..."),
+                              backgroundColor: Colors.green,
+                              duration: Duration(milliseconds: 800),
+                            ),
+                          );
+
+                          await Future.delayed(const Duration(milliseconds: 800));
+
+                          if (!mounted) return;
+                          currentNavigator.pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const SetUpProfileNew(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Register',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: buttonTextColor,
                           ),
                         ),
-                        // onPressed: isLoading
-                        //     ? null
-                        //     : () async {
-                        //         final currentContext = context;
-                        //         final currentMessenger = ScaffoldMessenger.maybeOf(currentContext);
-                        //         final currentNavigator = Navigator.of(currentContext);
-                        //         final email = emailController.text.trim();
-                        //         final reEmail = reenterEmailController.text.trim();
-                        //         final password = passwordController.text.trim();
-                        //         final rePassword = reenterPasswordController.text.trim();
-
-                        //         if (email != reEmail) {
-                        //           currentMessenger?.showSnackBar(
-                        //             const SnackBar(
-                        //               content: Text("Emails don't match"),
-                        //             ),
-                        //           );
-                        //           return;
-                        //         }
-
-                        //         if (password != rePassword) {
-                        //           currentMessenger?.showSnackBar(
-                        //             const SnackBar(
-                        //               content: Text("Passwords don't match"),
-                        //             ),
-                        //           );
-                        //           return;
-                        //         }
-
-                        //         if (!privacyPolicy) {
-                        //           currentMessenger?.showSnackBar(
-                        //             const SnackBar(
-                        //               content: Text(
-                        //                 "You must agree to the privacy policy",
-                        //               ),
-                        //             ),
-                        //           );
-                        //           return;
-                        //         }
-
-                        //         setState(() => isLoading = true);
-
-                        //         try {
-                        //           log("Starting registration for email: $email");
-                        //           final registerResponse = await _authService.register(email, password);
-                        //           log("User registered successfully: $registerResponse");
-
-                        //           final confirmationRequired = registerResponse['confirmation_required'] == true;
-
-                        //           if (confirmationRequired) {
-                        //             log("Email verification required");
-                        //             setState(() => isLoading = false);
-
-                        //             if (mounted) {
-                        //               WidgetsBinding.instance.addPostFrameCallback((_) {
-                        //                 if (mounted) {
-                        //                   _showEmailVerificationDialog(currentContext, email, password);
-                        //                 }
-                        //               });
-                        //             }
-                        //           } else {
-                        //             log("No email verification required, proceeding to profile setup");
-
-                        //             if (mounted) {
-                        //               currentMessenger?.showSnackBar(
-                        //                 const SnackBar(
-                        //                   content: Text(
-                        //                     "Registration successful! Setting up your profile...",
-                        //                   ),
-                        //                   backgroundColor: Colors.green,
-                        //                 ),
-                        //               );
-
-                        //               await Future.delayed(const Duration(milliseconds: 500));
-
-                        //               if (!mounted) return;
-                        //               currentNavigator.pushReplacement(
-                        //                 MaterialPageRoute(
-                        //                   builder: (context) => const SetUpProfileNew(),
-                        //                 ),
-                        //               );
-                        //             }
-
-                        //             setState(() => isLoading = false);
-                        //           }
-                        //         } catch (e, stack) {
-                        //           log(
-                        //             "Registration failed",
-                        //             error: e,
-                        //             stackTrace: stack,
-                        //           );
-                        //           if (mounted) {
-                        //             currentMessenger?.showSnackBar(
-                        //               SnackBar(
-                        //                 content: Text("Registration failed: $e"),
-                        //               ),
-                        //             );
-                        //           }
-                        //           setState(() => isLoading = false);
-                        //         }
-                        //       },
-                        child: isLoading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(maroon),
-                                ),
-                              )
-                            : Text(
-                                'Register',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: buttonTextColor,
-                                ),
-                              ),
                       ),
                     ),
                     const SizedBox(height: 14),
@@ -601,3 +369,5 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
+
+

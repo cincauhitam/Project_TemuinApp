@@ -1,79 +1,33 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_flutter/views/pages/messages_page.dart';
 import 'package:project_flutter/views/pages/notifications.dart';
-import 'package:project_flutter/views/widget_tree.dart';
-import '../../data/notifiers.dart'; // adjust path if needed
+import 'package:project_flutter/data/notifiers.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
+  @override Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
       valueListenable: isDarkMode,
       builder: (context, dark, _) {
         return AppBar(
-          backgroundColor:
-              dark ? const Color(0xFF121212) : Colors.white, // main bg
-          foregroundColor: dark ? Colors.white : Colors.black, // icons & text
+          backgroundColor: dark ? Color(0xFF121212) : Colors.white,
+          foregroundColor: dark ? Colors.white : Colors.black,
           elevation: 0,
           actions: [
-            IconButton(
-              icon: Icon(
-                Icons.notification_important,
-                color: dark ? Colors.white : Colors.black,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Notifications(),
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MessagesPage(),
-                  ),
-                );
-              },
-              icon: Icon(
-                Icons.message,
-                color: dark ? Colors.white : Colors.black,
-              ),
-            ),
+            IconButton(icon: Icon(Icons.notification_important), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const Notifications()))),
+            IconButton(icon: Icon(Icons.message), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MessagesPage()))),
           ],
-          title: ValueListenableBuilder(
+          title: ValueListenableBuilder<int>(
             valueListenable: selectedPageNotifier,
-            builder:
-                (BuildContext context, int selectedPage, Widget? child) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 52),
-                  child: Text(
-                    titles.elementAt(selectedPage),
-                    style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w500,
-                        color: dark ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+            builder: (context, sel, _) => Center(child: Padding(padding: EdgeInsets.only(left: 52), child: Text(titles[sel], style: GoogleFonts.poppins(textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: dark ? Colors.white : Colors.black)))))),
         );
       },
     );
   }
 
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  @override Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
+
+List<String> titles = ['Profile', 'Community', 'Activity', 'Home', 'Threads'];

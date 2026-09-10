@@ -17,7 +17,9 @@ class _SetUpTraitsState extends State<SetUpTraits> {
     'Running',
     'Badminton',
   ];
-  final List<String> genders = ['Male', 'Female', 'Other'];
+  // Gender field removed per PRD v2.0 §5.2 - excluded from product scope */
+  // final List<String> genders = ['Male', 'Female', 'Other'];
+
   final List<String> purposes = [
     'Do Sports',
     'Looking for Friend',
@@ -124,7 +126,7 @@ class _SetUpTraitsState extends State<SetUpTraits> {
               children: [
                 Center(
                   child: Text(
-                    "Pick your poison",
+                    "Let Us Know You Better",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -139,7 +141,8 @@ class _SetUpTraitsState extends State<SetUpTraits> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         buildCategory('Sport', sports),
-                        buildCategory('Gender', genders),
+                        /* Gender category removed per PRD v2.0 §5.2 - excluded from product scope */
+                        // buildCategory('Gender', genders),
                         buildCategory('What are you here for?', purposes),
                       ],
                     ),
